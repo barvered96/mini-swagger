@@ -1,5 +1,8 @@
-export interface Project{
-  name: string;
-  api: string;
-  description: string;
+import {Resource} from './resource';
+import {BaseModel} from './base-model';
+
+export const PROJECT_KEY = 'projects';
+
+export interface Project extends BaseModel {
+  resources?: Resource[];
 }

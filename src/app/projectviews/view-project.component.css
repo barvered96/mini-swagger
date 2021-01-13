@@ -5,3 +5,7 @@ h1{
   width: 50%;
   margin-left: 25%;
 }
+
+.inner-spacing{
+  padding: 5%;
+}
