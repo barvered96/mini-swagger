@@ -13,6 +13,7 @@ import { ViewProjectComponent } from './projectviews/view-project.component';
 import {LocalStorageService} from './local-storage-service.service';
 import { DialogComponent } from './dialog/dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
+import { ResourceComponent } from './resource/resource.component';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import {MatDialogModule} from '@angular/material/dialog';
     ProjectComponent,
     ViewProjectComponent,
     DialogComponent,
+    ResourceComponent,
   ],
   imports: [
     BrowserModule,

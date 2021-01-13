@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
-import {Project} from './project';
+import {Project, PROJECT_KEY} from './project';
 import {LocalStorageService} from './local-storage-service.service';
 import {PopupService} from './popup.service';
-import {Observable, Subject} from 'rxjs';
+import {Observable} from 'rxjs';
 
-const PROJECT_KEY = 'projects';
 
 @Injectable({
   providedIn: 'root'
@@ -12,20 +11,20 @@ const PROJECT_KEY = 'projects';
 export class ProjectService {
   constructor(private localStorageService: LocalStorageService,  private popUpService: PopupService) { }
 
-  private taskExists(task: Project, currentTasks: Project[]): boolean {
+  private taskExists(task: string, currentTasks: Project[]): Project {
     for (const project of currentTasks) {
-      if (task.name === project.name) {
-        return true;
+      if (task === project.name) {
+        return project;
       }
     }
-    return false;
+    return null;
   }
-  getProjects(): Observable<Project[]> {
+  public getProjects(): Observable<Project[]> {
     return this.localStorageService.getStorage(PROJECT_KEY);
   }
   addProject(task: Project): void {
     this.getProjects().subscribe(currentTasks => {
-      if (!this.taskExists(task, currentTasks)) {
+      if (!this.taskExists(task.name, currentTasks)) {
         currentTasks.push(task);
         this.localStorageService.setStorage(PROJECT_KEY, currentTasks);
         this.popUpService.openSnackBar(`Successfully created ${task.name}`, 'Remove', 'green-snackbar');
@@ -39,30 +38,27 @@ export class ProjectService {
 
   deleteProject(name: string): void {
     this.getProjects().subscribe(currentTasks => {
-      for (const project of currentTasks) {
-        if (name === project.name) {
-          currentTasks.splice(currentTasks.indexOf(project), 1);
-          this.localStorageService.setStorage(PROJECT_KEY, currentTasks);
-          this.popUpService.openSnackBar(`Successfully deleted ${name}`, 'Remove', 'green-snackbar');
-          return;
-        }
+      const task = this.taskExists(name, currentTasks);
+      if (task) {
+        currentTasks.splice(currentTasks.indexOf(task), 1);
+        this.localStorageService.setStorage(PROJECT_KEY, currentTasks);
+        this.popUpService.openSnackBar(`Successfully deleted ${name}`, 'Remove', 'green-snackbar');
+        return;
       }
       this.popUpService.openSnackBar(`Failed to delete ${name}`, 'Remove', 'red-snackbar');
     });
   }
 
   editProject(name: string, editedProject: Project): void {
-    const subject = new Subject<Project[]>();
     this.getProjects().subscribe(currentTasks => {
-      for (const project of currentTasks)
-      {
-        if (name === project.name) {
-          currentTasks[currentTasks.indexOf(project)] = editedProject;
-          this.localStorageService.setStorage(PROJECT_KEY, currentTasks);
-          this.popUpService.openSnackBar(`Successfully edited ${name}`, 'Remove', 'green-snackbar');
-          return;
-        }
-     }
+      const task = this.taskExists(name, currentTasks);
+      if (task) {
+        editedProject.resources = task.resources;
+        currentTasks[currentTasks.indexOf(task)] = editedProject;
+        this.localStorageService.setStorage(PROJECT_KEY, currentTasks);
+        this.popUpService.openSnackBar(`Successfully edited ${name}`, 'Remove', 'green-snackbar');
+        return;
+      }
       this.popUpService.openSnackBar(`Failed to edit ${name}`, 'Remove', 'red-snackbar');
     });
   }
