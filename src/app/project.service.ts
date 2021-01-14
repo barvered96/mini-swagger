@@ -50,6 +50,10 @@ export class ProjectService {
   }
 
   editProject(name: string, editedProject: Project): void {
+    if (editedProject.name === '') {
+      this.popUpService.openSnackBar(`Project name cannot be empty`, 'Remove', 'red-snackbar');
+      return;
+    }
     this.getProjects().subscribe(currentTasks => {
       const task = this.taskExists(name, currentTasks);
       if (task) {

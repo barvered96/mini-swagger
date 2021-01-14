@@ -14,6 +14,7 @@ import {LocalStorageService} from './local-storage-service.service';
 import { DialogComponent } from './dialog/dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { ResourceComponent } from './resource/resource.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { ResourceComponent } from './resource/resource.component';
     BrowserAnimationsModule,
     MaterialModule,
     MatDialogModule,
+    NgSelectModule
   ],
   providers: [LocalStorageService],
   bootstrap: [AppComponent]

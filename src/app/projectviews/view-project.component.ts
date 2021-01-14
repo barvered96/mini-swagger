@@ -29,16 +29,14 @@ export class ViewProjectComponent implements OnInit {
     });
   }
   openDialogResource(projectIndex: number): void {
-    if (this.editResource === ''){
+    if (!this.editResource){
       return;
     }
-    const resourceArray = this.editResource.split(',');
-    const previousName = resourceArray[0];
     const resource: Resource = {
-      name: resourceArray[0],
-      api: resourceArray[1],
-      description: resourceArray[2],
-      action: resourceArray[3]
+      name: this.editResource[0],
+      api: this.editResource[1],
+      description: this.editResource[2],
+      action: this.editResource[3]
     };
     this.dialog.openDialogResource(resource).subscribe(result => {
       if (result) {
@@ -47,7 +45,7 @@ export class ViewProjectComponent implements OnInit {
           this.projects = this.projectService.getProjects();
         }
         else {
-          this.resourceService.editResource(projectIndex, previousName, result);
+          this.resourceService.editResource(projectIndex, this.editResource[0], result);
           this.projects = this.projectService.getProjects();
         }
       }

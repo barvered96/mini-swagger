@@ -46,14 +46,18 @@ export class ResourceService {
       if (task) {
         currentTasks[projectIndex].resources.splice(currentTasks[projectIndex].resources.indexOf(task), 1);
         this.localStorageService.setStorage(PROJECT_KEY, currentTasks);
-        this.popUpService.openSnackBar(`Successfully deleted ${task.name}`, 'Remove', 'green-snackbar');
+        this.popUpService.openSnackBar(`Successfully deleted ${resource.name} in Project ${currentTasks[projectIndex].name}`, 'Remove', 'green-snackbar');
         return;
       }
-      this.popUpService.openSnackBar(`Failed to delete ${currentTasks[projectIndex].name}`, 'Remove', 'red-snackbar');
+      this.popUpService.openSnackBar(`Failed to delete ${resource.name} in Project ${currentTasks[projectIndex].name}`, 'Remove', 'red-snackbar');
     });
   }
 
   editResource(projectIndex: number, beforeEditName: string, editedResource: Resource): void {
+    if (editedResource.name === '') {
+      this.popUpService.openSnackBar(`Resource name cannot be empty`, 'Remove', 'red-snackbar');
+      return;
+    }
     this.projectService.getProjects().subscribe(currentTasks => {
       const task = this.getResource(currentTasks[projectIndex], beforeEditName);
       if (task) {
@@ -61,10 +65,10 @@ export class ResourceService {
         currentTasks[projectIndex].resources.splice(index, 1);
         currentTasks[projectIndex].resources.splice(index, 0, editedResource);
         this.localStorageService.setStorage(PROJECT_KEY, currentTasks);
-        this.popUpService.openSnackBar(`Successfully edited ${task.name}`, 'Remove', 'green-snackbar');
+        this.popUpService.openSnackBar(`Successfully edited ${editedResource.name} in Project ${currentTasks[projectIndex].name}`, 'Remove', 'green-snackbar');
         return;
       }
-      this.popUpService.openSnackBar(`Failed to edit ${currentTasks[projectIndex].name}`, 'Remove', 'red-snackbar');
+      this.popUpService.openSnackBar(`Failed to edit ${editedResource.name} in Project ${currentTasks[projectIndex].name}`, 'Remove', 'red-snackbar');
     });
   }
 

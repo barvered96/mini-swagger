@@ -9,3 +9,8 @@ h1{
 .inner-spacing{
   padding: 5%;
 }
+
+.form-resources{
+  background-color: white;
+  border-style: groove;
+}
