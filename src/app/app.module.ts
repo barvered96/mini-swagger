@@ -13,6 +13,8 @@ import { ViewProjectComponent } from './projectviews/view-project.component';
 import {LocalStorageService} from './local-storage-service.service';
 import { DialogComponent } from './dialog/dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
+import { ResourceComponent } from './resource/resource.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -25,6 +27,7 @@ import {MatDialogModule} from '@angular/material/dialog';
     ProjectComponent,
     ViewProjectComponent,
     DialogComponent,
+    ResourceComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,6 +35,7 @@ import {MatDialogModule} from '@angular/material/dialog';
     BrowserAnimationsModule,
     MaterialModule,
     MatDialogModule,
+    NgSelectModule
   ],
   providers: [LocalStorageService],
   bootstrap: [AppComponent]
