@@ -14,13 +14,13 @@ export class ProjectComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  addProject(projectDetails: string[]): void {
+  addToLocalStorage(projectDetails: string[]): void {
     const project: Project = {
       name: projectDetails[0],
       api: projectDetails[1],
-      description: projectDetails[2],
-      resources: []
+      description: projectDetails[2]
     };
+    console.log(project);
     this.projectService.addProject(project);
   }
 
