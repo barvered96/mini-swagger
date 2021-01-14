@@ -3,7 +3,7 @@
   <form class="row g-3">
     <div class="col-md-6">
       <label for="projectName" class="form-label">Available Projects</label>
-      <select #projectName id="projectName" class="form-select" aria-label="Default select example">
+      <select #projectName required id="projectName" ngModel name="projectName" #projectName="ngModel" class="form-select" aria-label="Default select example">
         <option selected></option>
         <ng-container *ngFor="let project of projects | async; index as i">
           <option value="{{i}}"> {{project.name}}</option>
@@ -12,7 +12,7 @@
     </div>
     <div class="col-md-6">
       <label for="name" class="form-label">Resource Name</label>
-      <input #resourceName type="text" class="form-control" id="name">
+      <input #resourceName placeholder="My New Resource" required minlength="3" type="text" class="form-control" ngModel name="name" #name="ngModel" id="name">
     </div>
 
     <div class="col-12">
@@ -29,7 +29,15 @@
     </div>
 
     <div class="col-12">
-      <button (click)="addResource([projectName.value, resourceName.value, path.value, desc.value, rest.value])"  type="submit" class="btn btn-primary">Create</button>
+      <button *ngIf= "!(name.invalid && (name.dirty || name.touched) && (name.errors.minlength || name.errors.required)) && resourceName.value.length !== 0 && projectName.value != ''"
+              (click)="addResource([projectName.value, resourceName.value, path.value, desc.value, rest.value])"  type="submit" class="btn btn-primary">Create</button>
+    </div>
+    <div *ngIf="name.invalid && (name.dirty || name.touched)"
+         class="alert alert-danger">
+      <div *ngIf="name.errors.minlength">
+        Resource name must be at least 3 characters long and you must pick a project
+      </div>
+
     </div>
   </form>
 </div>

@@ -30,12 +30,14 @@
     <td>{{project.api}}</td>
     <td>{{project.description}}</td>
     <td>
-      <select (change)="openDialogResource(i)" [(ngModel)]="editResource" id="projectName" class="form-select" aria-label="Default select example">
-        <option selected></option>
-    <ng-container *ngFor="let resource of project.resources; index as j">
-      <option value="{{[resource.name, resource.api, resource.description, resource.action]}}"> {{resource.name}}</option>
-    </ng-container>
-      </select>
+      <ng-select class="form-resources"aria-label="Default select example" (change)="openDialogResource(i)" [(ngModel)]="editResource" id="projectName">
+        <ng-option *ngFor="let resource of project.resources" [value]="[resource.name, resource.api, resource.description, resource.action]">{{resource.name}}</ng-option>
+<!--        <option selected></option>-->
+<!--    <ng-container *ngFor="let resource of project.resources; index as j">-->
+<!--      <option value="{{[resource.name, resource.api, resource.description, resource.action]}}"> {{resource.name}}</option>-->
+<!--    </ng-container>-->
+      </ng-select>
+
     </td>
 
   </tr>
