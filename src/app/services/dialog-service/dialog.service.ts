@@ -18,11 +18,7 @@ export class DialogService {
       resources: project.resources
     };
     const dialogRef = this.modalService.show<DialogComponent>(DialogComponent, {initialState: state, class: 'modal-lg'});
-    const subject = new Subject<Project>();
-    dialogRef.content.onClose.subscribe(result => {
-      subject.next(result);
-    });
-    return subject.asObservable();
+    return dialogRef.content.onClose;
   }
   openDialogResource(resource: Resource): Observable<any> {
     const state = {
@@ -32,10 +28,6 @@ export class DialogService {
       action: resource.action
     };
     const dialogRef = this.modalService.show<DialogComponent>(DialogComponent, {initialState: state});
-    const subject = new Subject<Resource>();
-    dialogRef.content.onClose.subscribe(result => {
-      subject.next(result);
-    });
-    return subject.asObservable();
+    return dialogRef.content.onClose;
   }
 }

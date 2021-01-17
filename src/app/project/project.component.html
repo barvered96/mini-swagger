@@ -17,7 +17,9 @@
   </div>
 
   <div class="col-12">
-    <button *ngIf= "!(name.invalid && (name.dirty || name.touched) && (name.errors.minlength || name.errors.required)) && projectName.value.length !== 0" (click)="addProject([projectName.value, api.value, desc.value])" type="submit" class="btn btn-primary">Create</button>
+    <button *ngIf= "!(name.invalid && (name.dirty || name.touched) && (name.errors.minlength || name.errors.required)) && projectName.value.length !== 0" (click)="addProject([projectName.value, api.value, desc.value])" type="submit" class="btn btn-primary">  <a class="btn btn-primary" href="/viewProjects">
+      Create </a></button>
+
   </div>
   <div *ngIf="name.invalid && (name.dirty || name.touched)"
        class="alert alert-danger">
