@@ -7,15 +7,15 @@ import { HomepageComponent } from './homepage/homepage.component';
 import { HeaderComponent } from './header/header.component';
 import { HomeviewComponent } from './homeview/homeview.component';
 import { ProjectComponent } from './project/project.component';
-import { ViewProjectComponent } from './project-views/view-project.component';
-import {LocalStorageService} from './services/storage-service/local-storage-service.service';
+import { ViewProjectComponent } from './view-project/view-project.component';
+import {LocalStorageService} from '../services/storage-service/local-storage-service.service';
 import { DialogComponent } from './dialog/dialog.component';
 import { ResourceComponent } from './resource/resource.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import {FormsModule} from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import {DialogService} from './services/dialog-service/dialog.service';
+import {DialogService} from '../services/dialog-service/dialog.service';
 
 
 @NgModule({

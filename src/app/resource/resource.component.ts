@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {ProjectService} from '../services/project-service/project.service';
+import {ProjectService} from '../../services/project-service/project.service';
 import {Observable} from 'rxjs';
 import {Project} from '../interfaces/project';
 import {Resource} from '../interfaces/resource';
-import {ResourceService} from '../services/resource-service/resource.service';
+import {ResourceService} from '../../services/resource-service/resource.service';
 
 @Component({
   selector: 'app-resource',

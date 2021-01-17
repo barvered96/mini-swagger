@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import {DialogComponent} from '../../dialog/dialog.component';
-import {Project} from '../../interfaces/project';
-import {Resource} from '../../interfaces/resource';
+import {DialogComponent} from '../../app/dialog/dialog.component';
+import {Project} from '../../app/interfaces/project';
+import {Resource} from '../../app/interfaces/resource';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import {Observable, Subject} from 'rxjs';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

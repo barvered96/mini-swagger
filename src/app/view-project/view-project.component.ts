@@ -1,9 +1,9 @@
 import {Component, OnChanges, OnInit} from '@angular/core';
-import {ProjectService} from '../services/project-service/project.service';
+import {ProjectService} from '../../services/project-service/project.service';
 import {Project} from '../interfaces/project';
-import {DialogService} from '../services/dialog-service/dialog.service';
+import {DialogService} from '../../services/dialog-service/dialog.service';
 import {Observable} from 'rxjs';
-import {ResourceService} from '../services/resource-service/resource.service';
+import {ResourceService} from '../../services/resource-service/resource.service';
 import {Resource} from '../interfaces/resource';
 
 

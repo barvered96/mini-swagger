@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 import {ProjectComponent} from './project/project.component';
-import {ViewProjectComponent} from './project-views/view-project.component';
+import {ViewProjectComponent} from './view-project/view-project.component';
 import {ResourceComponent} from './resource/resource.component';
 import {HomeviewComponent} from './homeview/homeview.component';
 

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Project, PROJECT_KEY} from '../../interfaces/project';
+import {Project, PROJECT_KEY} from '../../app/interfaces/project';
 import {LocalStorageService} from '../storage-service/local-storage-service.service';
 import {PopupService} from '../popup-service/popup.service';
 import {Observable} from 'rxjs';

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import {LocalStorageService} from '../storage-service/local-storage-service.service';
 import {PopupService} from '../popup-service/popup.service';
-import {Project, PROJECT_KEY} from '../../interfaces/project';
+import {Project, PROJECT_KEY} from '../../app/interfaces/project';
 import {Observable, Subject} from 'rxjs';
-import {Resource} from '../../interfaces/resource';
+import {Resource} from '../../app/interfaces/resource';
 import {ProjectService} from '../project-service/project.service';
 import {Local} from 'protractor/built/driverProviders';
 
