@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import {LocalStorageService} from './local-storage-service.service';
-import {PopupService} from './popup.service';
-import {Project, PROJECT_KEY} from './project';
+import {LocalStorageService} from '../storage-service/local-storage-service.service';
+import {PopupService} from '../popup-service/popup.service';
+import {Project, PROJECT_KEY} from '../../interfaces/project';
 import {Observable, Subject} from 'rxjs';
-import {Resource} from './resource';
-import {ProjectService} from './project.service';
+import {Resource} from '../../interfaces/resource';
+import {ProjectService} from '../project-service/project.service';
 import {Local} from 'protractor/built/driverProviders';
 
 @Injectable({
@@ -28,13 +28,13 @@ export class ResourceService {
       if (!task) {
         currentTasks[projectIndex].resources.push(resource);
         this.localStorageService.setStorage(PROJECT_KEY, currentTasks);
-        this.popUpService.openSnackBar(`Successfully created Resource ${resource.name} in Project ${currentTasks[projectIndex].name}`,
-          'Remove', 'green-snackbar');
+        this.popUpService.showSuccess(`Successfully created Resource ${resource.name} in Project ${currentTasks[projectIndex].name}`,
+          'Resource');
         return;
       }
       else {
-        this.popUpService.openSnackBar(`Failed to create Resource ${resource.name} in Project ${currentTasks[projectIndex].name}`,
-          'Remove', 'red-snackbar');
+        this.popUpService.showFailure(`Failed to create Resource ${resource.name} in Project ${currentTasks[projectIndex].name}`,
+          'Resource');
         }
       }
     );
@@ -46,16 +46,16 @@ export class ResourceService {
       if (task) {
         currentTasks[projectIndex].resources.splice(currentTasks[projectIndex].resources.indexOf(task), 1);
         this.localStorageService.setStorage(PROJECT_KEY, currentTasks);
-        this.popUpService.openSnackBar(`Successfully deleted ${resource.name} in Project ${currentTasks[projectIndex].name}`, 'Remove', 'green-snackbar');
+        this.popUpService.showSuccess(`Successfully deleted ${resource.name} in Project ${currentTasks[projectIndex].name}`, 'Resource');
         return;
       }
-      this.popUpService.openSnackBar(`Failed to delete ${resource.name} in Project ${currentTasks[projectIndex].name}`, 'Remove', 'red-snackbar');
+      this.popUpService.showFailure(`Failed to delete ${resource.name} in Project ${currentTasks[projectIndex].name}`, 'Resource');
     });
   }
 
   editResource(projectIndex: number, beforeEditName: string, editedResource: Resource): void {
     if (editedResource.name === '') {
-      this.popUpService.openSnackBar(`Resource name cannot be empty`, 'Remove', 'red-snackbar');
+      this.popUpService.showFailure(`Resource name cannot be empty`, 'Resource');
       return;
     }
     this.projectService.getProjects().subscribe(currentTasks => {
@@ -65,10 +65,10 @@ export class ResourceService {
         currentTasks[projectIndex].resources.splice(index, 1);
         currentTasks[projectIndex].resources.splice(index, 0, editedResource);
         this.localStorageService.setStorage(PROJECT_KEY, currentTasks);
-        this.popUpService.openSnackBar(`Successfully edited ${editedResource.name} in Project ${currentTasks[projectIndex].name}`, 'Remove', 'green-snackbar');
+        this.popUpService.showSuccess(`Successfully edited ${editedResource.name} in Project ${currentTasks[projectIndex].name}`, 'Resource');
         return;
       }
-      this.popUpService.openSnackBar(`Failed to edit ${editedResource.name} in Project ${currentTasks[projectIndex].name}`, 'Remove', 'red-snackbar');
+      this.popUpService.showFailure(`Failed to edit ${editedResource.name} in Project ${currentTasks[projectIndex].name}`, 'Resource');
     });
   }
 

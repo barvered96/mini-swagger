@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Project, PROJECT_KEY} from './project';
-import {LocalStorageService} from './local-storage-service.service';
-import {PopupService} from './popup.service';
+import {Project, PROJECT_KEY} from '../../interfaces/project';
+import {LocalStorageService} from '../storage-service/local-storage-service.service';
+import {PopupService} from '../popup-service/popup.service';
 import {Observable} from 'rxjs';
 
 
@@ -27,10 +27,10 @@ export class ProjectService {
       if (!this.taskExists(task.name, currentTasks)) {
         currentTasks.push(task);
         this.localStorageService.setStorage(PROJECT_KEY, currentTasks);
-        this.popUpService.openSnackBar(`Successfully created ${task.name}`, 'Remove', 'green-snackbar');
+        this.popUpService.showSuccess(`Successfully created ${task.name}`, 'Project');
         return;
       } else {
-        this.popUpService.openSnackBar(`Failed to create ${task.name}`, 'Remove', 'red-snackbar');
+        this.popUpService.showFailure(`Failed to create ${task.name}`, 'Project');
       }
     }
   );
@@ -42,16 +42,16 @@ export class ProjectService {
       if (task) {
         currentTasks.splice(currentTasks.indexOf(task), 1);
         this.localStorageService.setStorage(PROJECT_KEY, currentTasks);
-        this.popUpService.openSnackBar(`Successfully deleted ${name}`, 'Remove', 'green-snackbar');
+        this.popUpService.showSuccess(`Successfully deleted ${name}`, 'Project');
         return;
       }
-      this.popUpService.openSnackBar(`Failed to delete ${name}`, 'Remove', 'red-snackbar');
+      this.popUpService.showFailure(`Failed to delete ${name}`, 'Project');
     });
   }
 
   editProject(name: string, editedProject: Project): void {
     if (editedProject.name === '') {
-      this.popUpService.openSnackBar(`Project name cannot be empty`, 'Remove', 'red-snackbar');
+      this.popUpService.showFailure(`Project name cannot be empty`, 'Project');
       return;
     }
     this.getProjects().subscribe(currentTasks => {
@@ -60,10 +60,10 @@ export class ProjectService {
         editedProject.resources = task.resources;
         currentTasks[currentTasks.indexOf(task)] = editedProject;
         this.localStorageService.setStorage(PROJECT_KEY, currentTasks);
-        this.popUpService.openSnackBar(`Successfully edited ${name}`, 'Remove', 'green-snackbar');
+        this.popUpService.showSuccess(`Successfully edited ${name}`, 'Project');
         return;
       }
-      this.popUpService.openSnackBar(`Failed to edit ${name}`, 'Remove', 'red-snackbar');
+      this.popUpService.showFailure(`Failed to edit ${name}`, 'Project');
     });
   }
 }

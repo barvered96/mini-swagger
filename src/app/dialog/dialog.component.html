@@ -1,28 +1,36 @@
-<div mat-dialog-content>
-  <p>Edit <b>{{data.name}}</b></p>
-  <form class="row g-3">
+<div class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Edit {{name}}</h5>
+      </div>
+      <div class="modal-body">
+      <form class="row g-3">
     <div class="col-md-6">
       <label class="form-label">Entity Name</label>
-      <input name="name" type="text" [(ngModel)]="data.name">
+      <input name="name" type="text" [(ngModel)]="name">
     </div>
     <div class="col-12">
     <label class="form-label">API url</label>
-    <input name="api" type="text" [(ngModel)]="data.api">
+    <input name="api" type="text" [(ngModel)]="api">
     </div>
     <div class="col-12">
     <label class="form-label">Description</label>
-    <input name="desc" type="text" [(ngModel)]="data.description">
+    <input name="desc" type="text" [(ngModel)]="description">
     </div>
-    <div *ngIf="data.action != null" class="col-12">
+    <div *ngIf="action != null" class="col-12">
       <label class="form-label">Action</label>
-      <input name="action" type="text" [(ngModel)]="data.action">
+      <input name="action" type="text" [(ngModel)]="action">
     </div>
   </form>
 </div>
-<div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button *ngIf="data.action == null" [mat-dialog-close]="{name: data.name, api: data.api, description: data.description}">Save</button>
-  <button mat-button *ngIf="data.action != null" [mat-dialog-close]="{name: data.name, api: data.api, description: data.description, action: data.action, delete_flag: true}">Delete</button>
-  <button mat-button *ngIf="data.action != null" [mat-dialog-close]="{name: data.name, api: data.api, description: data.description, action: data.action}">Save</button>
+      <div class="modal-footer">
+        <button (click)="onCancel()">Cancel</button>
+        <button (click)="onSaveProject()"*ngIf="action === ''">Save</button>
+        <button (click)="onDelete()" *ngIf="action !== ''">Delete</button>
+        <button (click)="onSaveResource()" *ngIf="action !== ''">Save</button>
 
+      </div>
+    </div>
+  </div>
 </div>

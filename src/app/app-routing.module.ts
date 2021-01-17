@@ -2,13 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 import {ProjectComponent} from './project/project.component';
-import {HomeviewComponent} from './homeview/homeview.component';
-import {ViewProjectComponent} from './projectviews/view-project.component';
+import {ViewProjectComponent} from './project-views/view-project.component';
 import {ResourceComponent} from './resource/resource.component';
+import {HomeviewComponent} from './homeview/homeview.component';
 
 
 const routes: Routes = [
-  { path: '', component: HomeviewComponent},
+  { path: '', pathMatch: 'full', component: HomeviewComponent},
   { path: 'createResource', component: ResourceComponent},
   { path: 'viewProjects', component: ViewProjectComponent},
   { path: 'createProject', component: ProjectComponent}
