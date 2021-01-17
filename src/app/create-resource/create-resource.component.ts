@@ -7,10 +7,10 @@ import {ResourceService} from '../../services/resource-service/resource.service'
 
 @Component({
   selector: 'app-resource',
-  templateUrl: './resource.component.html',
-  styleUrls: ['./resource.component.css']
+  templateUrl: './create-resource.component.html',
+  styleUrls: ['./create-resource.component.css']
 })
-export class ResourceComponent implements OnInit {
+export class CreateResourceComponent implements OnInit {
   public projects: Observable<Project[]>;
   constructor(private projectService: ProjectService, private resourceService: ResourceService) { }
 

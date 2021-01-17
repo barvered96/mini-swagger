@@ -5,10 +5,10 @@ import {Project} from '../interfaces/project';
 
 @Component({
   selector: 'app-project',
-  templateUrl: './project.component.html',
-  styleUrls: ['./project.component.scss']
+  templateUrl: './create-project.component.html',
+  styleUrls: ['./create-project.component.css']
 })
-export class ProjectComponent implements OnInit {
+export class CreateProjectComponent implements OnInit {
 
   constructor(private projectService: ProjectService) { }
 

@@ -1,17 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
-import {ProjectComponent} from './project/project.component';
+import {CreateProjectComponent} from './create-project/create-project.component';
 import {ViewProjectComponent} from './view-project/view-project.component';
-import {ResourceComponent} from './resource/resource.component';
+import {CreateResourceComponent} from './create-resource/create-resource.component';
 import {HomeviewComponent} from './homeview/homeview.component';
+import {CreateModelComponent} from './create-model/create-model.component';
 
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HomeviewComponent},
-  { path: 'createResource', component: ResourceComponent},
+  { path: 'createModel', component: CreateModelComponent},
+  { path: 'createResource', component: CreateResourceComponent},
   { path: 'viewProjects', component: ViewProjectComponent},
-  { path: 'createProject', component: ProjectComponent}
+  { path: 'createProject', component: CreateProjectComponent}
 ];
 
 @NgModule({
