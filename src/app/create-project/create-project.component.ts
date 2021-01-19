@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {ProjectService} from '../../services/project-service/project.service';
 import {Project} from '../interfaces/project';
-
+import {ToastrService} from 'ngx-toastr';
+import { setTimeout} from 'timers';
 
 @Component({
   selector: 'app-project',
@@ -10,18 +11,25 @@ import {Project} from '../interfaces/project';
 })
 export class CreateProjectComponent implements OnInit {
 
-  constructor(private projectService: ProjectService) { }
+  constructor(private projectService: ProjectService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
   }
+
   addProject(projectDetails: string[]): void {
     const project: Project = {
       name: projectDetails[0],
-      api: projectDetails[1],
+      fullApiUrl: projectDetails[1],
       description: projectDetails[2],
       resources: []
     };
-    this.projectService.addProject(project);
-  }
 
+    const projectAdd = this.projectService.addProject(project).subscribe(
+      projects => {
+        this.toastr.success(`Successfully created project ${project.name}`, 'Project');
+      },
+          err => this.toastr.error(err, 'Project')
+    );
+    projectAdd.unsubscribe();
+  }
 }

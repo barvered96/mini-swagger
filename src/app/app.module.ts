@@ -3,41 +3,43 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HomepageComponent } from './homepage/homepage.component';
+import { HomePageComponent } from './home-page/home-page.component';
 import { HeaderComponent } from './header/header.component';
-import { HomeviewComponent } from './homeview/homeview.component';
+import { HomeViewComponent } from './home-view/home-view.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { ViewProjectComponent } from './view-project/view-project.component';
 import {LocalStorageService} from '../services/storage-service/local-storage-service.service';
-import { DialogComponent } from './dialog/dialog.component';
+import { EditResourceComponent } from './edit-resource/edit-resource.component';
 import { CreateResourceComponent } from './create-resource/create-resource.component';
-import { NgSelectModule } from '@ng-select/ng-select';
 import {FormsModule} from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { EditProjectComponent } from './edit-project/edit-project.component';
+import { ViewResourceComponent } from './view-resource/view-resource.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomepageComponent,
+    HomePageComponent,
     HeaderComponent,
-    HomeviewComponent,
+    HomeViewComponent,
     CreateProjectComponent,
     ViewProjectComponent,
-    DialogComponent,
+    EditResourceComponent,
     CreateResourceComponent,
+    EditProjectComponent,
+    ViewResourceComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    NgSelectModule,
     ToastrModule.forRoot(),
     ModalModule.forRoot(),
     FormsModule
   ],
-  entryComponents: [DialogComponent],
+  entryComponents: [EditResourceComponent],
   providers: [LocalStorageService],
   bootstrap: [AppComponent]
 })

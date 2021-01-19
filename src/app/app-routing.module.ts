@@ -4,15 +4,17 @@ import {RouterModule, Routes} from '@angular/router';
 import {CreateProjectComponent} from './create-project/create-project.component';
 import {ViewProjectComponent} from './view-project/view-project.component';
 import {CreateResourceComponent} from './create-resource/create-resource.component';
-import {HomeviewComponent} from './homeview/homeview.component';
+import {HomeViewComponent} from './home-view/home-view.component';
 import {CreateModelComponent} from './create-model/create-model.component';
+import {ViewResourceComponent} from './view-resource/view-resource.component';
 
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', component: HomeviewComponent},
+  { path: '', pathMatch: 'full', component: HomeViewComponent},
   { path: 'createModel', component: CreateModelComponent},
-  { path: 'createResource', component: CreateResourceComponent},
+  { path: 'createResource', component: CreateResourceComponent, pathMatch: 'full'},
   { path: 'viewProjects', component: ViewProjectComponent},
+  { path: 'viewResources', component: ViewResourceComponent, pathMatch: 'full'},
   { path: 'createProject', component: CreateProjectComponent}
 ];
 

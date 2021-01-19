@@ -1,5 +1,6 @@
-import {BaseModel} from './base-model';
-
-export interface Resource extends BaseModel {
-  action: string;
+export interface Resource {
+  name: string;
+  apiSuffix: string;
+  description: string;
+  method: string;
 }

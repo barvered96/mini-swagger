@@ -1,69 +1,73 @@
 import {Injectable} from '@angular/core';
 import {Project, PROJECT_KEY} from '../../app/interfaces/project';
 import {LocalStorageService} from '../storage-service/local-storage-service.service';
-import {PopupService} from '../popup-service/popup.service';
-import {Observable} from 'rxjs';
-
+import {Observable, throwError} from 'rxjs';
+import {tap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProjectService {
-  constructor(private localStorageService: LocalStorageService,  private popUpService: PopupService) { }
 
-  private taskExists(task: string, currentTasks: Project[]): Project {
-    for (const project of currentTasks) {
-      if (task === project.name) {
+export class ProjectService {
+  constructor(private localStorageService: LocalStorageService) { }
+
+  private projectExists(proj: string, currentProjects: Project[]): Project {
+    for (const project of currentProjects) {
+      if (proj === project.name) {
         return project;
       }
     }
+
     return null;
   }
+
   public getProjects(): Observable<Project[]> {
     return this.localStorageService.getStorage(PROJECT_KEY);
   }
-  addProject(task: Project): void {
-    this.getProjects().subscribe(currentTasks => {
-      if (!this.taskExists(task.name, currentTasks)) {
-        currentTasks.push(task);
-        this.localStorageService.setStorage(PROJECT_KEY, currentTasks);
-        this.popUpService.showSuccess(`Successfully created ${task.name}`, 'Project');
-        return;
+
+  addProject(proj: Project): Observable<Project[]> {
+    return this.getProjects().pipe(
+      tap(currentProjects => {
+      if (!this.projectExists(proj.name, currentProjects)) {
+        currentProjects.push(proj);
+        this.localStorageService.setStorage(PROJECT_KEY, currentProjects);
       } else {
-        this.popUpService.showFailure(`Failed to create ${task.name}`, 'Project');
+        return throwError(`Failed to create ${proj.name}`);
       }
     }
-  );
+  ));
   }
 
-  deleteProject(name: string): void {
-    this.getProjects().subscribe(currentTasks => {
-      const task = this.taskExists(name, currentTasks);
-      if (task) {
-        currentTasks.splice(currentTasks.indexOf(task), 1);
-        this.localStorageService.setStorage(PROJECT_KEY, currentTasks);
-        this.popUpService.showSuccess(`Successfully deleted ${name}`, 'Project');
-        return;
+  deleteProject(name: string): Observable<Project[]> {
+    return this.getProjects().pipe(
+      tap(currentProjects => {
+      const proj = this.projectExists(name, currentProjects);
+      if (proj) {
+        currentProjects.splice(currentProjects.indexOf(proj), 1);
+        this.localStorageService.setStorage(PROJECT_KEY, currentProjects);
       }
-      this.popUpService.showFailure(`Failed to delete ${name}`, 'Project');
-    });
+      else {
+        return throwError(`Failed to delete ${proj.name}`);
+      }
+    }));
   }
 
-  editProject(name: string, editedProject: Project): void {
+  editProject(name: string, editedProject: Project): Observable<Project[]> {
     if (editedProject.name === '') {
-      this.popUpService.showFailure(`Project name cannot be empty`, 'Project');
-      return;
+      return throwError(`Project Name Cannot be Empty`);
     }
-    this.getProjects().subscribe(currentTasks => {
-      const task = this.taskExists(name, currentTasks);
-      if (task) {
-        editedProject.resources = task.resources;
-        currentTasks[currentTasks.indexOf(task)] = editedProject;
-        this.localStorageService.setStorage(PROJECT_KEY, currentTasks);
-        this.popUpService.showSuccess(`Successfully edited ${name}`, 'Project');
-        return;
+
+    return this.getProjects().pipe(
+      tap(currentProjects => {
+      const proj = this.projectExists(name, currentProjects);
+      if (proj) {
+        editedProject.resources = proj.resources;
+        currentProjects[currentProjects.indexOf(proj)] = editedProject;
+        this.localStorageService.setStorage(PROJECT_KEY, currentProjects);
       }
-      this.popUpService.showFailure(`Failed to edit ${name}`, 'Project');
-    });
+      else {
+        return throwError(`Failed to edit ${proj.name}`);
+      }
+    }));
   }
 }

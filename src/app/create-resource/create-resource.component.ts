@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {ProjectService} from '../../services/project-service/project.service';
-import {Observable} from 'rxjs';
-import {Project} from '../interfaces/project';
 import {Resource} from '../interfaces/resource';
 import {ResourceService} from '../../services/resource-service/resource.service';
+import {ActivatedRoute, Params} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-resource',
@@ -11,20 +11,34 @@ import {ResourceService} from '../../services/resource-service/resource.service'
   styleUrls: ['./create-resource.component.css']
 })
 export class CreateResourceComponent implements OnInit {
-  public projects: Observable<Project[]>;
-  constructor(private projectService: ProjectService, private resourceService: ResourceService) { }
+  public projectIndex: number;
+  public projectName: string;
+  constructor(private activatedRoute: ActivatedRoute, private projectService: ProjectService,
+              private resourceService: ResourceService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
-    this.projects = this.projectService.getProjects();
+    this.activatedRoute.queryParams.subscribe((params: Params) => {
+      this.projectIndex = params.projectID;
+      this.projectService.getProjects().subscribe(projects => {
+        this.projectName = projects[this.projectIndex].name;
+      });
+    });
   }
+
   addResource(resourceDetails: string[]): void {
-    console.log(resourceDetails);
     const resource: Resource = {
-      name: resourceDetails[1],
-      api: resourceDetails[2],
-      description: resourceDetails[3],
-      action: resourceDetails[4]
+      name: resourceDetails[0],
+      apiSuffix: resourceDetails[1],
+      description: resourceDetails[2],
+      method: resourceDetails[3]
     };
-    this.resourceService.addResource(parseInt(resourceDetails[0], 10), resource);
+
+    const resourceAdd = this.resourceService.addResource(this.projectIndex, resource).subscribe(
+      projects => {
+        this.toastr.success(`Successfully created resource ${resource.name} in project ${projects[this.projectIndex].name}`, 'Resource');
+      },
+      err => this.toastr.error(err, 'Resource')
+    );
+    resourceAdd.unsubscribe();
   }
 }

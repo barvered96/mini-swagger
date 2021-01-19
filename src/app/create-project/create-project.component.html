@@ -1,30 +1,26 @@
-<div class="forming">
+<div class="new-project-form">
   <h2> Create a new project</h2>
-
-  <form class="row g-3">
-    <div class="col-md-6">
+  <form>
+    <div class="form-group">
       <label for="name" class="form-label">Project Name</label>
       <input #projectName required minlength="3" type="text" class="form-control" ngModel name="name" #name="ngModel"
              id="name" placeholder="My New Project">
     </div>
-
-    <div class="col-12">
+    <div class="form-group">
       <label for="api" class="form-label">API base url</label>
-      <input minlength="2" #api type="url" class="form-control" id="api" placeholder="/isalive">
+      <input #api type="url" class="form-control" id="api" placeholder="/isAlive">
     </div>
-    <div class="col-12">
+    <div class="form-group">
       <label for="general" class="form-label">General Description</label>
-      <input minlength="2" #desc type="text" class="form-control" id="general"
+      <input #desc type="text" class="form-control" id="general"
              placeholder="Checks if the url sends a ping back">
     </div>
-
-    <div class="col-12">
+    <div class="form-group">
       <button
         *ngIf="!(name.invalid && (name.dirty || name.touched) && (name.errors.minlength || name.errors.required)) && projectName.value.length !== 0"
         (click)="addProject([projectName.value, api.value, desc.value])" type="submit" class="btn btn-primary"><a
         class="btn btn-primary" href="/viewProjects">
         Create </a></button>
-
     </div>
     <div *ngIf="name.invalid && (name.dirty || name.touched)"
          class="alert alert-danger">
@@ -35,6 +31,5 @@
         Project Name is required.
       </div>
     </div>
-
   </form>
 </div>

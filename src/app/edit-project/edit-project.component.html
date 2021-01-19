@@ -1,0 +1,27 @@
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5> Edit Project {{name}} </h5>
+    </div>
+    <div class="modal-body">
+      <form class="row g-3">
+        <div class="col-12">
+          <label class="form-label"> Project Name: </label>
+          <input name="name" type="text" [(ngModel)]="name">
+        </div>
+        <div class="col-12">
+          <label class="form-label">API full url: </label>
+          <input name="api" type="text" [(ngModel)]="fullApiUrl">
+        </div>
+        <div class="col-12">
+          <label class="form-label">Description: </label>
+          <input name="desc" type="text" [(ngModel)]="description">
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" (click)="onCancel()">Cancel</button>
+      <button class="btn btn-primary" (click)="onSaveProject()">Save</button>
+    </div>
+  </div>
+</div>

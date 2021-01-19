@@ -1,5 +1,5 @@
 h1 {
-  margin-left: 20em;
+  margin-left: 18em;
 }
 
 .inner-spacing {
@@ -16,12 +16,9 @@ h1 {
 }
 
 .table-wrapper {
-  max-height: 20em;
-  overflow-y: auto;
   width: 40em;
   margin-left: 40em;
+  max-height: 20em;
+  overflow-y: auto;
   overflow-x: hidden;
-
 }
-
-

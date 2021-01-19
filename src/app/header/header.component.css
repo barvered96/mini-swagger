@@ -1,8 +1,3 @@
-section {
-  display: table;
-  width:100%;
-}
-
-.example-button-row {
-  display: table-cell;
+.header {
+  width: 120em;
 }

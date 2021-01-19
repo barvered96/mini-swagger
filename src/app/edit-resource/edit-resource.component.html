@@ -1,8 +1,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 *ngIf="action != null">Edit Resource {{name}}</h5>
-        <h5 *ngIf="action == null">Edit Project {{name}}</h5>
+        <h5>Edit Resource {{name}}</h5>
       </div>
       <div class="modal-body">
         <form class="row g-3">
@@ -12,23 +11,21 @@
           </div>
           <div class="col-12">
             <label class="form-label">API url: </label>
-            <input name="api" type="text" [(ngModel)]="api">
+            <input name="api" type="text" [(ngModel)]="apiSuffix">
           </div>
           <div class="col-12">
             <label class="form-label">Description: </label>
             <input name="desc" type="text" [(ngModel)]="description">
           </div>
-          <div *ngIf="action != null" class="col-12">
+          <div *ngIf="method != null" class="col-12">
             <label class="form-label">Action: </label>
-            <input name="action" type="text" [(ngModel)]="action">
+            <input name="action" type="text" [(ngModel)]="method">
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary" (click)="onCancel()">Cancel</button>
-        <button class="btn btn-primary" (click)="onSaveProject()" *ngIf="action == null">Save</button>
-        <button class="btn btn-primary" (click)="onDelete()" *ngIf="action != null">Delete</button>
-        <button class="btn btn-primary" (click)="onSaveResource()" *ngIf="action != null">Save</button>
+        <button class="btn btn-primary" (click)="onSaveResource()">Save</button>
       </div>
     </div>
   </div>
