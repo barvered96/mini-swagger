@@ -1,10 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ProjectService} from '../../services/project-service/project.service';
-import {Project} from '../interfaces/project';
-import {BsModalService} from 'ngx-bootstrap/modal';
-import {EditProjectComponent} from '../edit-project/edit-project.component';
+import {Project} from '../../interfaces/project';
 import {ToastrService} from 'ngx-toastr';
-import {of} from 'rxjs';
 
 
 @Component({
@@ -15,34 +12,13 @@ import {of} from 'rxjs';
 export class ViewProjectComponent implements OnInit {
   public projects: Project[];
 
-  constructor(private projectService: ProjectService, public modalService: BsModalService, private toastr: ToastrService) { }
+  constructor(private projectService: ProjectService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
-    this.projectService.getProjects().subscribe(projects => {
+    const getSub = this.projectService.getProjects().subscribe(projects => {
       this.projects = projects;
-    }).unsubscribe();
-  }
-
-  openDialogProject(name: string, fullApiUrl: string, description: string): void {
-    const project: Project = {
-      name,
-      fullApiUrl,
-      description
-    };
-
-    const dialogRef = this.modalService.show<EditProjectComponent>(EditProjectComponent, {initialState: project});
-    let editProject = of().subscribe();
-    dialogRef.content.onClose.subscribe(result => {
-      if (result) {
-        editProject = this.projectService.editProject(name, result).subscribe(projects => {
-          this.toastr.success(`Successfully edited project ${project.name}`, 'Project');
-          this.projects = projects;
-        },
-          err => this.toastr.error(err, 'Project')
-        );
-      }
     });
-    editProject.unsubscribe();
+    getSub.unsubscribe();
   }
 
   deleteProject(name: string): void {

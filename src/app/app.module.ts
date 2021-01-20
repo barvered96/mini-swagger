@@ -6,17 +6,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomePageComponent } from './home-page/home-page.component';
 import { HeaderComponent } from './header/header.component';
 import { HomeViewComponent } from './home-view/home-view.component';
-import { CreateProjectComponent } from './create-project/create-project.component';
+import { ProjectActionsComponent } from './project-actions/project-actions.component';
 import { ViewProjectComponent } from './view-project/view-project.component';
 import {LocalStorageService} from '../services/storage-service/local-storage-service.service';
-import { EditResourceComponent } from './edit-resource/edit-resource.component';
-import { CreateResourceComponent } from './create-resource/create-resource.component';
+import { ResourceActionsComponent } from './resource-actions/resource-actions.component';
 import {FormsModule} from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { EditProjectComponent } from './edit-project/edit-project.component';
 import { ViewResourceComponent } from './view-resource/view-resource.component';
-
 
 @NgModule({
   declarations: [
@@ -24,11 +21,9 @@ import { ViewResourceComponent } from './view-resource/view-resource.component';
     HomePageComponent,
     HeaderComponent,
     HomeViewComponent,
-    CreateProjectComponent,
+    ProjectActionsComponent,
     ViewProjectComponent,
-    EditResourceComponent,
-    CreateResourceComponent,
-    EditProjectComponent,
+    ResourceActionsComponent,
     ViewResourceComponent,
   ],
   imports: [
@@ -39,7 +34,6 @@ import { ViewResourceComponent } from './view-resource/view-resource.component';
     ModalModule.forRoot(),
     FormsModule
   ],
-  entryComponents: [EditResourceComponent],
   providers: [LocalStorageService],
   bootstrap: [AppComponent]
 })

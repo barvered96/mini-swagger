@@ -1,6 +1,6 @@
 export interface Resource {
   name: string;
-  apiSuffix: string;
+  route: string;
   description: string;
   method: string;
 }

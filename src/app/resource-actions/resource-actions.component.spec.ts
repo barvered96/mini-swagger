@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditProjectComponent } from './edit-project.component';
+import { ResourceActionsComponent } from './resource-actions.component';
 
-describe('EditProjectComponent', () => {
-  let component: EditProjectComponent;
-  let fixture: ComponentFixture<EditProjectComponent>;
+describe('ResourceComponent', () => {
+  let component: ResourceActionsComponent;
+  let fixture: ComponentFixture<ResourceActionsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EditProjectComponent ]
+      declarations: [ ResourceActionsComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditProjectComponent);
+    fixture = TestBed.createComponent(ResourceActionsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

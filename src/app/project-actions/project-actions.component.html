@@ -1,0 +1,41 @@
+<div class="new-project-form container">
+  <h2 *ngIf="edit"> Edit Project {{name}}</h2>
+  <h2 *ngIf="!edit"> Create a new project </h2>
+  <form>
+    <div class="form-group">
+      <label for="name" class="form-label"> Project Name: </label>
+      <input [disabled]="edit" id="name" [ngClass]="{'is-invalid': name && name.length < 3 }" class="form-control" type="text" name="name" [(ngModel)]="name">
+    </div>
+    <div class="alert-danger" *ngIf="name && name.length < 3">
+        Project name must be at least 3 letters
+    </div>
+    <div class="form-group">
+      <label for="desc" class="form-label">Description: </label>
+      <input id="desc" name="desc" class="form-control" type="text" [(ngModel)]="description">
+    </div>
+    <div class="form-group">
+      <label for="url" class="form-label">Full URL: </label>
+      <input id="url" name="url" required class="form-control" [ngClass]="{'is-invalid': fullApiUrl && !validURL()}" type="text" [(ngModel)]="fullApiUrl">
+    </div>
+    <div class="alert-danger" *ngIf="fullApiUrl && !validURL()">
+      URL must be a valid url
+    </div>
+    <div class="form-group">
+    <button
+      *ngIf="!edit"
+      routerLink="/viewProjects"
+      [disabled]="!formValidity()"
+      (click)="addProject()" type="submit" class="btn btn-primary btn-sm mt-1">
+      Create
+    </button>
+    <button
+      *ngIf="edit"
+      class="btn btn-primary btn-sm mt-1"
+      routerLink="/viewProjects"
+      [disabled]="!formValidity()"
+      (click)="onEdit()">
+      Save
+    </button>
+    </div>
+  </form>
+</div>

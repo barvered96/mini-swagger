@@ -1,27 +1,14 @@
-h1 {
-  margin-left: 20em;
-}
-
-.inner-spacing {
-  padding: 0.5em;
-}
-
 .form-resources {
   background-color: white;
   border-style: groove;
 }
 
-.create-button {
-  margin-left: 40em;
+.title {
+  text-align: center;
 }
 
 .table-wrapper {
   max-height: 20em;
   overflow-y: auto;
-  width: 40em;
-  margin-left: 40em;
   overflow-x: hidden;
-
 }
-
-
