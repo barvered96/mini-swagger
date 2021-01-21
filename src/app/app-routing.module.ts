@@ -7,11 +7,13 @@ import {ResourceActionsComponent} from './resource-actions/resource-actions.comp
 import {HomeViewComponent} from './home-view/home-view.component';
 import {ModelActionsComponent} from './model-actions/model-actions.component';
 import {ViewResourceComponent} from './view-resource/view-resource.component';
+import {ViewModelComponent} from './view-model/view-model.component';
 
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HomeViewComponent},
   { path: 'createModel', component: ModelActionsComponent},
+  { path: 'viewModel', component: ViewModelComponent},
   { path: 'createResource', component: ResourceActionsComponent, pathMatch: 'full'},
   { path: 'viewProjects', component: ViewProjectComponent},
   { path: 'viewResources', component: ViewResourceComponent, pathMatch: 'full'},

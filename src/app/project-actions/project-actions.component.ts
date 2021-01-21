@@ -5,6 +5,7 @@ import {Resource} from '../../interfaces/resource';
 import {EntityActionsComponent} from '../entity-actions/entity-actions.component';
 import {ActivatedRoute, Params} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
+import {Model} from '../../interfaces/model';
 
 @Component({
   selector: 'app-project',
@@ -14,6 +15,7 @@ import {ToastrService} from 'ngx-toastr';
 export class ProjectActionsComponent extends EntityActionsComponent implements OnInit {
   public fullApiUrl: string;
   public resources: Resource[] = [];
+  public models: Model[] = [];
 
   constructor(private activatedRoute: ActivatedRoute,
               private projectService: ProjectService, protected toastr: ToastrService) { super(toastr); }
@@ -32,7 +34,8 @@ export class ProjectActionsComponent extends EntityActionsComponent implements O
       name: this.name,
       fullApiUrl: this.fullApiUrl,
       description: this.description,
-      resources: this.resources
+      resources: this.resources,
+      models: this.models
     };
     super.addEntity(project, this.projectService.addProject(project), 'Project');
   }
@@ -42,7 +45,8 @@ export class ProjectActionsComponent extends EntityActionsComponent implements O
       name: this.name,
       fullApiUrl: this.fullApiUrl,
       description: this.description,
-      resources: this.resources
+      resources: this.resources,
+      models: this.models
     };
     super.editEntity(project, this.projectService.editProject(this.name, project), 'Project');
   }

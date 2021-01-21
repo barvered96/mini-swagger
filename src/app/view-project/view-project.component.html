@@ -10,6 +10,7 @@
         <th scope="col">API base url</th>
         <th scope="col">Description</th>
         <th scope="col">Resources</th>
+        <th scope="col">Models</th>
       </tr>
       </thead>
       <tbody>
@@ -35,6 +36,14 @@
               class="btn btn-primary btn-sm">
               View Resources
             </button>
+          </td>
+          <td>
+            <select name="model" class="form-select"
+                    id="model">
+              <option></option>
+              <option (click)="addModel()"> Create New Model</option>
+              <option (click)="editModel(model)"*ngFor="let model of project.models" [value]="model"> {{model}}</option>
+            </select>
           </td>
         </tr>
       </ng-container>
