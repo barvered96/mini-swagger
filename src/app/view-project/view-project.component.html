@@ -38,12 +38,15 @@
             </button>
           </td>
           <td>
-            <select name="model" class="form-select"
+            <div class="d-flex">
+            <select (change)="editModel(project.name, model)" [(ngModel)]="model" name="model" class="form-select"
                     id="model">
-              <option></option>
-              <option (click)="addModel()"> Create New Model</option>
-              <option (click)="editModel(model)"*ngFor="let model of project.models" [value]="model"> {{model}}</option>
+              <option [ngValue]="null"></option>
+              <option *ngFor="let model of project.models" [ngValue]="model"> {{model.name}}</option>
             </select>
+            <span class="p-1"></span>
+            <img src="/assets/img/file-plus.svg" (click)="addModel(project.name)" width="25" height="35" title="Add Model">
+            </div>
           </td>
         </tr>
       </ng-container>

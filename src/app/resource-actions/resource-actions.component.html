@@ -37,6 +37,16 @@
       Path must be a valid Route
     </div>
     <div class="form-group">
+      <label for="model" class="form-label"> Model: </label>
+      <select [(ngModel)]="model" name="model" class="form-select"
+              id="model">
+        <option *ngFor="let projectModel of parentProjectModels" [ngValue]="projectModel"> {{projectModel.name}}</option>
+      </select>
+    </div>
+    <div class="alert-danger" *ngIf="!model">
+      Must pick a model
+    </div>
+    <div class="form-group">
       <button
         routerLink="/viewResources"
         [queryParams]="{projectName: projectName}"

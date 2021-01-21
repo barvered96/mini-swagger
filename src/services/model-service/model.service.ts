@@ -9,6 +9,7 @@ import {tap} from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
+
 export class ModelService {
 
   constructor(private localStorageService: LocalStorageService, private projectService: ProjectService) {
@@ -27,7 +28,7 @@ export class ModelService {
               currentProjects[projectIndex].models.push(model);
               this.localStorageService.setStorage(PROJECT_KEY, currentProjects);
             } else {
-              throw new Error(`Failed to create Model ${model.name} in Project ${currentProjects[projectIndex].name}`);
+              throw new Error(`Failed to create Model ${model.name} in Project ${currentProjects[projectIndex].name}, already exists`);
             }
           }
         ));
@@ -47,19 +48,13 @@ export class ModelService {
         }));
   }
 
-  editModel(projectIndex: number, beforeEditName: string, editModel: Model): Observable<Project[]> {
-    if (editModel.name === '') {
-      return this.projectService.getProjects().pipe(tap(projects => {
-        throw new Error(`Model Name Cannot be Empty`);
-      }));
-    }
+  editModel(projectIndex: number, editModel: Model): Observable<Project[]> {
     return this.projectService.getProjects()
       .pipe(
         tap(currentResources => {
-          const foundModel = this.getModel(currentResources[projectIndex], beforeEditName);
           const foundEdited = this.getModel(currentResources[projectIndex], editModel.name);
-          if (foundModel && !foundEdited || foundModel && foundEdited && foundModel.name === foundEdited.name) {
-            const index = currentResources[projectIndex].models.indexOf(foundModel);
+          if (foundEdited) {
+            const index = currentResources[projectIndex].models.indexOf(foundEdited);
             currentResources[projectIndex].models.splice(index, 1);
             currentResources[projectIndex].models.splice(index, 0, editModel);
             this.localStorageService.setStorage(PROJECT_KEY, currentResources);

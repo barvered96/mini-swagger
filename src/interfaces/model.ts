@@ -1,4 +1,6 @@
+import {ModelField} from './modelField';
+
 export interface Model {
   name: string;
-  fields: any[];
+  fields: ModelField[];
 }

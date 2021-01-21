@@ -28,7 +28,7 @@ export class ProjectService {
           this.localStorageService.setStorage(PROJECT_KEY, currentProjects);
           }
         else {
-          throw new Error(`Failed to create ${projectName.name}`);
+          throw new Error(`Failed to create ${projectName.name}, already exists`);
           }
        })
       );
@@ -51,9 +51,6 @@ export class ProjectService {
   }
 
   editProject(name: string, editedProject: Project): Observable<Project[]> {
-    if (editedProject.name === '') {
-      return this.getProjects().pipe(tap(projects => {throw new Error(`Project Name Cannot be Empty`); }));
-    }
     return this.getProjects().pipe(
       tap(currentProjects => {
         const projectName = this.projectExists(name, currentProjects);

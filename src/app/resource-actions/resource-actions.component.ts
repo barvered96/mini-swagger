@@ -5,6 +5,7 @@ import {ResourceService} from '../../services/resource-service/resource.service'
 import {ActivatedRoute, Params} from '@angular/router';
 import {EntityActionsComponent} from '../entity-actions/entity-actions.component';
 import {ToastrService} from 'ngx-toastr';
+import {Model} from '../../interfaces/model';
 
 @Component({
   selector: 'app-resource',
@@ -16,6 +17,8 @@ export class ResourceActionsComponent extends EntityActionsComponent implements 
   public projectName: string;
   public options: string[] = ['DELETE', 'POST', 'GET', 'PUT'];
   public route: string;
+  public model: Model;
+  public parentProjectModels: Model[];
   public method: string;
 
   constructor(private activatedRoute: ActivatedRoute, private projectService: ProjectService,
@@ -27,12 +30,14 @@ export class ResourceActionsComponent extends EntityActionsComponent implements 
       this.name = params.name;
       this.edit = params.edit;
       this.route = params.route;
+      this.model = params.model;
       this.description = params.description;
       this.method = params.method;
       this.projectService.getProjects().subscribe(projects => {
         for (const [index, project] of projects.entries()) {
           if (project.name === this.projectName) {
             this.projectIndex = index;
+            this.parentProjectModels = projects[index].models;
           }
         }
       });
@@ -44,7 +49,8 @@ export class ResourceActionsComponent extends EntityActionsComponent implements 
       name: this.name,
       route: this.route,
       description: this.description,
-      method: this.method
+      method: this.method,
+      model: this.model
     };
     super.addEntity(resource, this.resourceService.addResource(this.projectIndex, resource), 'Resource');
   }
@@ -54,9 +60,10 @@ export class ResourceActionsComponent extends EntityActionsComponent implements 
       name: this.name,
       route: this.route,
       description: this.description,
-      method: this.method
+      method: this.method,
+      model: this.model
     };
-    super.editEntity(resource, this.resourceService.editResource(this.projectIndex, this.name, resource), 'Resource');
+    super.editEntity(resource, this.resourceService.editResource(this.projectIndex, resource), 'Resource');
   }
 
 
@@ -69,7 +76,7 @@ export class ResourceActionsComponent extends EntityActionsComponent implements 
 
   formValidity(): boolean {
     try {
-      if (this.name.length >= 3 && this.pathValidity()) {
+      if (this.name.length >= 3 && this.pathValidity() && this.model) {
         return true;
       }
       return false;

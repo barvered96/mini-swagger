@@ -1,46 +1,50 @@
-<h1 class="title"> Project {{projectName}}'s Models </h1>
-<div class="container">
-  <div class="table-wrapper">
-    <form class="form-inline my-2 my-lg-0">
-      <input #searchValue class="form-control" type="text" placeholder="Search" aria-label="Search">
-    </form>
-    <table class="table">
-      <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Model Options</th>
-        <th scope="col">Model Name</th>
-        <th scope="col" *ngFor="let field of models.fields"> </th>
-        <th scope="col">API Suffix</th>
-        <th scope="col">Description</th>
-        <th scope="col">Method</th>
-      </tr>
-      </thead>
-      <tbody>
-      <ng-container *ngFor="let model of models; index as i">
-        <tr *ngIf="model.name.startsWith(searchValue.value)">
-          <th scope="row">{{i + 1}}</th>
-          <td>
-            <img (click)="deleteModel(model)" src="/assets/img/trash.svg" alt="" width="20" height="20"
-                 title="Delete Model">
-            <span class="p-2"></span>
-            <img routerLink="/createResource"
-                 [queryParams]="{projectName: projectName, name: model.name, fields: model.fields, edit: true}"
-                 src="/assets/img/pencil.svg" alt="" width="20" height="20" title="Model Resource">
-          </td>
-          <td>{{resource.name}}</td>
-          <td>{{resource.route}}</td>
-          <td>{{resource.description}}</td>
-          <td>{{resource.method}}</td>
-        </tr>
-      </ng-container>
-      </tbody>
-    </table>
+<!-- Modal -->
+<div class="modal-dialog m-0" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 *ngIf="newModel" class="modal-title"> Create a new model</h5>
+      <h5 *ngIf="!newModel" class="modal-title"> Edit Model {{modelName}}</h5>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="form-group">
+          <label for="modelName" class="form-label"> Model Name: </label>
+          <input [disabled]="!newModel" [ngClass]="{'is-invalid': modelName && modelName.length < 3}" id="modelName" name="modelName" class="form-control" type="text"
+                 [(ngModel)]="modelName">
+        </div>
+        <div class="alert-danger" *ngIf="modelName && modelName.length < 3">
+          Model Name must be at least 3 letters
+        </div>
+        <div class="form-group">
+          <label for="fields" class="form-label"> Number of Fields: </label>
+          <input id="fields" name="numFields" class="form-control" (change)="changeNumFields()" min="1" type="number" [(ngModel)]="numFields">
+        </div>
+        <div *ngFor="let field of modelFields; index as i" class="form-group">
+          <label for="{{i}}-name" class="form-label"> Field {{i + 1}} Name: </label>
+          <input [ngClass]="{'is-invalid': !field.name && field.fieldType}" id="{{i}}-name" name="{{i}}-name" class="form-control" placeholder="Field Name"
+                 [(ngModel)]="field.name">
+          <div class="alert-danger" *ngIf="!field.name && field.fieldType">
+            A field name cannot be empty
+          </div>
+          <label for="{{i}}-field" class="form-label"> Field {{i + 1}} Type: </label>
+
+          <select [ngClass]="{'is-invalid': field.name && !field.fieldType}" name="{{i}}-field" type="select" id="{{i}}-field" class="form-control" [(ngModel)]="field.fieldType">
+            <option *ngFor="let simpleType of types;" [value]="simpleType">{{simpleType}}</option>
+          </select>
+          <div class="alert-danger" *ngIf="field.name && !field.fieldType">
+            A field type cannot be empty
+          </div>
+        </div>
+
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" (click)="onCancel() " class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
+      <button [disabled]="!formValidity()" type="button" *ngIf="newModel" (click)="onCreate()" class="btn btn-primary btn-sm"> Create</button>
+      <button type="button" *ngIf="!newModel" (click)="onDelete()" class="btn btn-primary btn-sm"> Delete</button>
+      <button [disabled]="!fieldValidity()" type="button" *ngIf="!newModel" (click)="onCreate()" class="btn btn-primary btn-sm"> Save</button>
+
+
+    </div>
   </div>
-  <button routerLink="/createResource"
-          [queryParams]="{projectName: projectName}"
-          type="submit"
-          class="btn btn-primary btn-sm">
-    Create New Resource
-  </button>
 </div>

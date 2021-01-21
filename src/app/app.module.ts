@@ -14,7 +14,7 @@ import {FormsModule} from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ViewResourceComponent } from './view-resource/view-resource.component';
-import { ViewModelComponent } from './view-model/view-model.component';
+import {ViewModelComponent} from './view-model/view-model.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +26,7 @@ import { ViewModelComponent } from './view-model/view-model.component';
     ViewProjectComponent,
     ResourceActionsComponent,
     ViewResourceComponent,
-    ViewModelComponent,
+    ViewModelComponent
   ],
   imports: [
     BrowserModule,
