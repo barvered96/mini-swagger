@@ -1,0 +1,28 @@
+<div class="card">
+  <div class="card-header">
+    <ul class="nav">
+      <li class="nav-item active fw-bold">
+        {{expandedResource?.name}}
+      </li>
+      <span class="m-2"></span>
+      <li class="rounded nav-item {{optionsColors[expandedResource.method]}} text-white">
+        {{expandedResource?.method}}
+      </li>
+      <span class="m-2"></span>
+      <li class="nav-item active">
+        {{expandedResource?.route}}
+      </li>
+      <span class="m-2"></span>
+      <li class="nav-item active">
+        {{expandedResource?.description}}
+      </li>
+    </ul>
+  </div>
+  <div class="card-body bg-dark text-white">
+    <h5 class="fw-bold"> {{model?.name}} </h5>
+    {{'{'}}
+    <br>
+    <span *ngFor="let model of model.fields"> {{model.name + ': ' + model.fieldType}} <br></span>
+    {{'}'}}
+  </div>
+</div>

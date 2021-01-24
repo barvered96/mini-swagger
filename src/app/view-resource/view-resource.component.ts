@@ -15,7 +15,8 @@ import {zip} from 'rxjs';
 export class ViewResourceComponent implements OnInit {
   public resources: Resource[];
   public projectIndex: number;
-  public projectName; string;
+  public projectName: string;
+  public expandedResource: Resource = null;
 
   constructor(private activatedRoute: ActivatedRoute, private projectService: ProjectService,
               private resourceService: ResourceService,  private toastr: ToastrService) { }
@@ -42,5 +43,9 @@ export class ViewResourceComponent implements OnInit {
       err => this.toastr.error(err, 'Resource')
     );
     deleteSub.unsubscribe();
+  }
+
+  expandResourceBody(resource: Resource): void {
+    this.expandedResource = resource;
   }
 }

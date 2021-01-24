@@ -33,12 +33,21 @@
           <td>{{resource.route}}</td>
           <td>{{resource.description}}</td>
           <td>{{resource.method}}</td>
-          <td>{{resource.model.name}}</td>
+          <td>
+            <button (click)="expandResourceBody(resource)" class="btn btn-primary btn-sm" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#resource-body" aria-expanded="false"
+                    aria-controls="collapseExample">
+              {{resource.model}}
+            </button>
+          </td>
 
         </tr>
       </ng-container>
       </tbody>
     </table>
+    <div *ngIf="expandedResource" class="collapse m-1" id="resource-body">
+        <app-model-json-creator [expandedResource]="expandedResource" [expandedModel]="expandedResource.model"> </app-model-json-creator>
+    </div>
   </div>
   <button routerLink="/resource"
           [queryParams]="{projectName: projectName}"

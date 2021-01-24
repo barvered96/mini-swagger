@@ -40,7 +40,7 @@
       <label for="model" class="form-label"> Model: </label>
       <select [(ngModel)]="model" name="model" class="form-select"
               id="model">
-        <option *ngFor="let projectModel of parentProjectModels" [ngValue]="projectModel"> {{projectModel.name}}</option>
+        <option *ngFor="let projectModel of parentProjectModels" [ngValue]="projectModel.name"> {{projectModel.name}}</option>
       </select>
     </div>
     <div class="alert-danger" *ngIf="!model">

@@ -17,7 +17,7 @@ export class ResourceActionsComponent extends EntityActionsComponent implements 
   public projectName: string;
   public options: string[] = ['DELETE', 'POST', 'GET', 'PUT'];
   public route: string;
-  public model: Model;
+  public model: string;
   public parentProjectModels: Model[];
   public method: string;
 
