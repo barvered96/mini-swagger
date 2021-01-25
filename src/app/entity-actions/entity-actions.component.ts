@@ -9,7 +9,6 @@ import {ToastrService} from 'ngx-toastr';
 
 export abstract class EntityActionsComponent implements OnInit{
   public name: string;
-  public description: string;
   public edit = false;
 
   protected constructor(protected toastr: ToastrService) {}

@@ -1,41 +1,50 @@
 <div class="new-project-form container">
-  <h2 *ngIf="edit"> Edit Project {{name}}</h2>
+  <h1 *ngIf="edit"> Project {{name}}'s Page</h1>
   <h2 *ngIf="!edit"> Create a new project </h2>
-  <form>
+  <form [urlValid]="['url']" name="form" #f="ngForm">
     <div class="form-group">
       <label for="name" class="form-label"> Project Name: </label>
-      <input [disabled]="edit" id="name" [ngClass]="{'is-invalid': name && name.length < 3 }" class="form-control" type="text" name="name" [(ngModel)]="name">
+      <input [disabled]="edit" id="name" [ngClass]="{'is-invalid': projectName.touched && projectName.invalid }" class="form-control"
+             type="text" name="projectName" #projectName="ngModel" [(ngModel)]="name" required minlength="3">
     </div>
-    <div class="alert-danger" *ngIf="name && name.length < 3">
-        Project name must be at least 3 letters
-    </div>
-    <div class="form-group">
-      <label for="desc" class="form-label">Description: </label>
-      <input id="desc" name="desc" class="form-control" type="text" [(ngModel)]="description">
-    </div>
-    <div class="form-group">
-      <label for="url" class="form-label">Full URL: </label>
-      <input id="url" name="url" required class="form-control" [ngClass]="{'is-invalid': fullApiUrl && !validURL()}" type="text" [(ngModel)]="fullApiUrl">
-    </div>
-    <div class="alert-danger" *ngIf="fullApiUrl && !validURL()">
-      URL must be a valid url
+    <div class="alert-danger" *ngIf="projectName.touched && projectName.invalid">
+      <div *ngIf="projectName.errors.required">
+      Project Name must not be empty
+      </div>
+      <div *ngIf="projectName.errors.minlength">
+        Project Name must be at least 3 letters
+      </div>
     </div>
     <div class="form-group">
-    <button
-      *ngIf="!edit"
-      routerLink="/viewProjects"
-      [disabled]="!formValidity()"
-      (click)="addProject()" type="submit" class="btn btn-primary btn-sm mt-1">
-      Create
-    </button>
-    <button
-      *ngIf="edit"
-      class="btn btn-primary btn-sm mt-1"
-      routerLink="/viewProjects"
-      [disabled]="!formValidity()"
-      (click)="onEdit()">
-      Save
-    </button>
+      <label for="desc" class="form-label">Description:
+        <img [hidden]="!edit" (click)="editDescription = !editDescription" src="/assets/img/pencil.svg" alt="" width="20" height="20" title="Edit Description"> </label>
+      <input (change)="edit && onEdit()" (blur)="editDescription = false" [disabled]="!editDescription && edit" id="desc" name="desc" class="form-control editable" type="text" [(ngModel)]="description">
+    </div>
+    <div class="form-group">
+      <label for="url" class="form-label">Full URL:
+        <img [hidden]="!edit" (click)="editURL = !editURL" src="/assets/img/pencil.svg" alt="" width="20" height="20" title="Edit URL"> </label>
+      <input (change)="edit && url.valid && onEdit()" (blur)="editURL = false" [disabled]="!editURL && edit" id="url" name="url" #url="ngModel" required class="form-control" [ngClass]="{'is-invalid': url.touched && url.invalid}"
+             type="text" [(ngModel)]="fullApiUrl">
+    </div>
+    <div class="alert-danger" *ngIf="url.touched && url.invalid || edit && url.invalid">
+      <div *ngIf="url.errors.required">
+        URL cannot be empty
+      </div>
+      <div *ngIf="url.errors.urlValid">
+        URL must be a valid url
+      </div>
+    </div>
+    <div class="form-group">
+      <button
+        [disabled]="f.form.invalid"
+        (click)="addProject()"
+        *ngIf="!edit" type="submit" class="btn btn-primary btn-sm mt-1">
+        Create
+      </button>
     </div>
   </form>
+</div>
+<div *ngIf="edit">
+  <app-view-resource [projectName]="name"></app-view-resource>
+  <app-view-models [projectName]="name"></app-view-models>
 </div>

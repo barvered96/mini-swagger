@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { ModelService } from './model.service';
 
-describe('ModelServiceService', () => {
+xdescribe('ModelServiceService', () => {
   let service: ModelService;
 
   beforeEach(() => {
@@ -14,3 +14,4 @@ describe('ModelServiceService', () => {
     expect(service).toBeTruthy();
   });
 });
+

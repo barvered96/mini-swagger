@@ -5,16 +5,14 @@ import {ProjectActionsComponent} from './project-actions/project-actions.compone
 import {ViewProjectComponent} from './view-project/view-project.component';
 import {ResourceActionsComponent} from './resource-actions/resource-actions.component';
 import {HomeViewComponent} from './home-view/home-view.component';
-import {ViewResourceComponent} from './view-resource/view-resource.component';
-import {ViewModelComponent} from './view-model/view-model.component';
+import {ModelActionsComponent} from './model-actions/model-actions.component';
 
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HomeViewComponent},
-  { path: 'viewModel', component: ViewModelComponent},
-  { path: 'resource', component: ResourceActionsComponent, pathMatch: 'full'},
+  { path: 'model', component: ModelActionsComponent},
+  { path: 'resource', component: ResourceActionsComponent},
   { path: 'viewProjects', component: ViewProjectComponent},
-  { path: 'viewResources', component: ViewResourceComponent, pathMatch: 'full'},
   { path: 'project', component: ProjectActionsComponent}
 ];
 

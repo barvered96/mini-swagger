@@ -1,0 +1,43 @@
+<div class="new-model-form container">
+  <h2 *ngIf="edit"> Edit Model {{name}}</h2>
+  <h2 *ngIf="!edit"> Create a new model </h2>
+  <form [formGroup]="modelForm">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label"> Model Name: </label>
+        <input type="text" class="form-control" formControlName="modelName">
+      </div>
+    </div>
+    <div *ngFor="let field of t.controls; index as i" class="list-group list-group-flush">
+      <div class="list-group-item">
+        <h5 class="card-title"> Field {{i + 1}}</h5>
+        <div [formGroup]="field" class="row">
+          <div class="form-group col-6">
+            <label class="form-label"> Field Name </label>
+            <input type="text" class="form-control" formControlName="fieldName">
+          </div>
+          <div class="form-group col-6">
+            <label class="form-label"> Field Value </label>
+            <select class="form-select" formControlName="fieldType">
+              <option value=""></option>
+              <option *ngFor="let option of options" [value]="option"> {{option}} </option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group text-sm-end m-3">
+      <img type="submit" src="/assets/img/file-plus.svg" width="25" height="25" (click)="onExtraField()"  title="Add Field">
+      <span class="m-1"></span>
+      <img type="submit" src="/assets/img/file-minus.svg" width="25" height="25" (click)="onMinusField()"  title="Remove Field">
+    </div>
+    <div class="form-group">
+      <button *ngIf="!edit" type="submit" (click)="addModel()" class="btn btn-primary btn-sm mt-1"
+              [disabled]="!modelForm.valid"> Create
+      </button>
+      <button *ngIf="edit" type="submit" (click)="editModel()" class="btn btn-primary btn-sm mt-1"
+              [disabled]="!modelForm.valid"> Save
+      </button>
+    </div>
+  </form>
+</div>

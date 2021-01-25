@@ -9,8 +9,6 @@
         <th scope="col">Project Name</th>
         <th scope="col">API base url</th>
         <th scope="col">Description</th>
-        <th scope="col">Resources</th>
-        <th scope="col">Models</th>
       </tr>
       </thead>
       <tbody>
@@ -23,31 +21,11 @@
             <span class="p-2"></span>
             <img
               [queryParams]="{name: project.name, fullApiUrl: project.fullApiUrl, description: project.description, edit: true}"
-              routerLink="/project" src="/assets/img/pencil.svg" alt="" width="20" height="20" title="Edit Project">
+              routerLink="/project" src="/assets/img/eye-fill.svg" alt="" width="20" height="20" title="View Project">
           </td>
           <td>{{project.name}}</td>
           <td>{{project.fullApiUrl}}</td>
           <td>{{project.description}}</td>
-          <td>
-            <button
-              routerLink="/viewResources"
-              [queryParams]="{projectName: project.name}"
-              type="submit"
-              class="btn btn-primary btn-sm">
-              View Resources
-            </button>
-          </td>
-          <td>
-            <div class="d-flex">
-            <select (change)="editModel(project.name, model)" [(ngModel)]="model" name="model" class="form-select"
-                    id="model">
-              <option [ngValue]="null"></option>
-              <option *ngFor="let model of project.models" [ngValue]="model"> {{model.name}}</option>
-            </select>
-            <span class="p-1"></span>
-            <img src="/assets/img/file-plus.svg" (click)="addModel(project.name)" width="25" height="35" title="Add Model">
-            </div>
-          </td>
         </tr>
       </ng-container>
       </tbody>

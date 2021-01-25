@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewModelComponent } from './view-model.component';
+import { ModelActionsComponent } from './model-actions.component';
 
-xdescribe('ViewModelsComponent', () => {
-  let component: ViewModelComponent;
-  let fixture: ComponentFixture<ViewModelComponent>;
+describe('ModelActionsComponent', () => {
+  let component: ModelActionsComponent;
+  let fixture: ComponentFixture<ModelActionsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ViewModelComponent ]
+      declarations: [ ModelActionsComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ViewModelComponent);
+    fixture = TestBed.createComponent(ModelActionsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

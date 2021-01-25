@@ -5,5 +5,5 @@ export interface Resource {
   route: string;
   description: string;
   method: string;
-  model?: string;
+  body?: string;
 }

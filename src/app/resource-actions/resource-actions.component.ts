@@ -6,6 +6,7 @@ import {ActivatedRoute, Params} from '@angular/router';
 import {EntityActionsComponent} from '../entity-actions/entity-actions.component';
 import {ToastrService} from 'ngx-toastr';
 import {Model} from '../../interfaces/model';
+import {zip} from 'rxjs';
 
 @Component({
   selector: 'app-resource',
@@ -17,7 +18,8 @@ export class ResourceActionsComponent extends EntityActionsComponent implements 
   public projectName: string;
   public options: string[] = ['DELETE', 'POST', 'GET', 'PUT'];
   public route: string;
-  public model: string;
+  public body: string;
+  public description: string;
   public parentProjectModels: Model[];
   public method: string;
 
@@ -25,22 +27,21 @@ export class ResourceActionsComponent extends EntityActionsComponent implements 
               private resourceService: ResourceService, protected toastr: ToastrService) { super(toastr); }
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams.subscribe((params: Params) => {
-      this.projectName = params.projectName;
-      this.name = params.name;
-      this.edit = params.edit;
-      this.route = params.route;
-      this.model = params.model;
-      this.description = params.description;
-      this.method = params.method;
-      this.projectService.getProjects().subscribe(projects => {
-        for (const [index, project] of projects.entries()) {
-          if (project.name === this.projectName) {
-            this.projectIndex = index;
-            this.parentProjectModels = projects[index].models;
-          }
+    const mergeObservables = zip(this.activatedRoute.queryParams, this.projectService.getProjects());
+    mergeObservables.subscribe((params: Params) => {
+      this.projectName = params[0].projectName;
+      this.name = params[0].name;
+      this.edit = params[0].edit;
+      this.route = params[0].route;
+      this.body = params[0].body;
+      this.description = params[0].description;
+      this.method = params[0].method;
+      for (const [index, project] of params[1].entries()) {
+        if (project.name === this.projectName) {
+          this.projectIndex = index;
+          this.parentProjectModels = params[1][index].models;
         }
-      });
+      }
     });
   }
 
@@ -50,7 +51,7 @@ export class ResourceActionsComponent extends EntityActionsComponent implements 
       route: this.route,
       description: this.description,
       method: this.method,
-      model: this.model
+      body: this.body
     };
     super.addEntity(resource, this.resourceService.addResource(this.projectIndex, resource), 'Resource');
   }
@@ -61,7 +62,7 @@ export class ResourceActionsComponent extends EntityActionsComponent implements 
       route: this.route,
       description: this.description,
       method: this.method,
-      model: this.model
+      body: this.body
     };
     super.editEntity(resource, this.resourceService.editResource(this.projectIndex, resource), 'Resource');
   }
@@ -76,7 +77,7 @@ export class ResourceActionsComponent extends EntityActionsComponent implements 
 
   formValidity(): boolean {
     try {
-      if (this.name.length >= 3 && this.pathValidity() && this.model) {
+      if (this.name.length >= 3 && this.pathValidity() && this.body) {
         return true;
       }
       return false;

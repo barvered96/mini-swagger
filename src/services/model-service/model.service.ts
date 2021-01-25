@@ -23,7 +23,7 @@ export class ModelService {
     return this.projectService.getProjects()
       .pipe(
           mergeMap(projects => projects),
-          filter(project => this.getModelByProject(project, name) !== null),
+          filter(project => this.getModelByProject(project, name) !== undefined),
           map(project => this.getModelByProject(project, name))
         );
   }

@@ -1,4 +1,4 @@
-<h1 class="title"> Project {{projectName}}'s Resources </h1>
+<h4 class="title mt-3"> Resources </h4>
 <div class="container">
   <div class="table-wrapper">
     <form class="form-inline my-2 my-lg-0">
@@ -13,7 +13,7 @@
         <th scope="col">API Suffix</th>
         <th scope="col">Description</th>
         <th scope="col">Method</th>
-        <th scope="col">Model</th>
+        <th scope="col">Body</th>
       </tr>
       </thead>
       <tbody>
@@ -26,7 +26,7 @@
             <span class="p-2"></span>
             <img routerLink="/resource"
                  [queryParams]="{projectName: projectName, name: resource.name, route: resource.route,
-                  description: resource.description, method: resource.method, model: resource.model, edit: true}"
+                  description: resource.description, method: resource.method, body: resource.body, edit: true}"
                  src="/assets/img/pencil.svg" alt="" width="20" height="20" title="Edit Resource">
           </td>
           <td>{{resource.name}}</td>
@@ -37,7 +37,7 @@
             <button (click)="expandResourceBody(resource)" class="btn btn-primary btn-sm" type="button"
                     data-bs-toggle="collapse" data-bs-target="#resource-body" aria-expanded="false"
                     aria-controls="collapseExample">
-              {{resource.model}}
+              {{resource.body}}
             </button>
           </td>
 
@@ -45,8 +45,8 @@
       </ng-container>
       </tbody>
     </table>
-    <div *ngIf="expandedResource" class="collapse m-1" id="resource-body">
-        <app-model-json-creator [expandedResource]="expandedResource" [expandedModel]="expandedResource.model"> </app-model-json-creator>
+    <div class="collapse m-1" id="resource-body">
+        <app-model-json-creator *ngIf="expandedResource" [expandedResource]="expandedResource" [expandedModel]="expandedResource.body"> </app-model-json-creator>
     </div>
   </div>
   <button routerLink="/resource"

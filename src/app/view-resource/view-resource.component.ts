@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Resource} from '../../interfaces/resource';
 import {ResourceService} from '../../services/resource-service/resource.service';
 import {BsModalService} from 'ngx-bootstrap/modal';
@@ -15,24 +15,21 @@ import {zip} from 'rxjs';
 export class ViewResourceComponent implements OnInit {
   public resources: Resource[];
   public projectIndex: number;
-  public projectName: string;
+  @Input() public projectName: string;
   public expandedResource: Resource = null;
 
   constructor(private activatedRoute: ActivatedRoute, private projectService: ProjectService,
               private resourceService: ResourceService,  private toastr: ToastrService) { }
 
   ngOnInit(): void {
-    const mergedObserves = zip(this.activatedRoute.queryParams, this.projectService.getProjects());
-    const subscription = mergedObserves.subscribe(paramsAndProject => {
-      this.projectName = paramsAndProject[0].projectName;
-      for (const [i, project] of paramsAndProject[1].entries()) {
+    this.projectService.getProjects().subscribe(currentProjects => {
+      for (const [i, project] of currentProjects.entries()) {
         if (project.name === this.projectName) {
           this.resources = project.resources;
           this.projectIndex = i;
         }
       }
     });
-    subscription.unsubscribe();
   }
 
   deleteResource(resource: Resource): void {

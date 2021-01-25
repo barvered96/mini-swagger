@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Model} from '../../interfaces/model';
 import {ActivatedRoute} from '@angular/router';
 import {ProjectService} from '../../services/project-service/project.service';
@@ -7,6 +7,8 @@ import {Subject, zip} from 'rxjs';
 import {ModelService} from '../../services/model-service/model.service';
 import {BsModalRef} from 'ngx-bootstrap/modal';
 import {ModelField} from '../../interfaces/modelField';
+import {Resource} from '../../interfaces/resource';
+import {ResourceService} from '../../services/resource-service/resource.service';
 
 @Component({
   selector: 'app-view-models',
@@ -14,67 +16,33 @@ import {ModelField} from '../../interfaces/modelField';
   styleUrls: ['./view-model.component.css']
 })
 export class ViewModelComponent implements OnInit {
-  public modelName: string;
-  public modelFields: ModelField[];
-  public newModel: boolean;
-  public projectName; string;
-  public numFields: number;
+  public models: Model[];
+  public projectIndex: number;
+  @Input() public projectName: string;
   public types = ['number', 'string',' boolean', 'Array<number>', 'Array<string>', 'Array<boolean>'];
-  public onClose: Subject<any>;
 
-  constructor(private ref: BsModalRef) { }
+  constructor(private activatedRoute: ActivatedRoute, private projectService: ProjectService,
+              private modelService: ModelService,  private toastr: ToastrService) {}
 
   ngOnInit(): void {
-    this.onClose = new Subject<any>();
-  }
-
-  changeNumFields(): void {
-    if (this.numFields >= this.modelFields.length) {
-      for (let index = 0; index < this.numFields - this.modelFields.length; index++) {
-        this.modelFields.push({name: '', fieldType: ''});
+    this.projectService.getProjects().subscribe(currentProjects => {
+      for (const [i, project] of currentProjects.entries()) {
+        if (project.name === this.projectName) {
+          this.models = project.models;
+          this.projectIndex = i;
+        }
       }
-    } else {
-      for (let index = 0; index < this.modelFields.length - this.numFields; index++) {
-        this.modelFields.pop();
-      }
-    }
+    });
   }
 
-  onCreate(): void {
-    const model: Model = {
-      name: this.modelName,
-      fields: this.modelFields
-    };
-    this.onClose.next([model, false]);
-    this.ref.hide();
+  deleteModel(model: Model): void {
+    const deleteSub = this.modelService.deleteModel(this.projectIndex, model).subscribe(projects => {
+        this.toastr.success(`Successfully deleted model ${model.name} in project ${projects[this.projectIndex].name}`, 'Resource');
+        this.models = projects[this.projectIndex].models;
+      },
+      err => this.toastr.error(err, 'Model')
+    );
+    deleteSub.unsubscribe();
   }
-
-  onDelete(): void {
-    const model: Model = {
-      name: this.modelName,
-      fields: this.modelFields,
-    };
-    this.onClose.next([model, true]);
-    this.ref.hide();
-  }
-
-  onCancel(): void {
-      this.onClose.next([null, false]);
-      this.ref.hide();
-  }
-
-  fieldValidity(): boolean {
-    for (const field of this.modelFields) {
-      if (!field.name || !field.fieldType) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  formValidity(): boolean {
-    return this.fieldValidity() && this.modelName.length >= 3;
-  }
-
 }
 

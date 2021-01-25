@@ -37,19 +37,19 @@
       Path must be a valid Route
     </div>
     <div class="form-group">
-      <label for="model" class="form-label"> Model: </label>
-      <select [(ngModel)]="model" name="model" class="form-select"
+      <label for="model" class="form-label"> Body: </label>
+      <select [(ngModel)]="body" name="model" class="form-select"
               id="model">
         <option *ngFor="let projectModel of parentProjectModels" [ngValue]="projectModel.name"> {{projectModel.name}}</option>
       </select>
     </div>
-    <div class="alert-danger" *ngIf="!model">
+    <div class="alert-danger" *ngIf="!body">
       Must pick a model
     </div>
     <div class="form-group">
       <button
-        routerLink="/viewResources"
-        [queryParams]="{projectName: projectName}"
+        routerLink="/project"
+        [queryParams]="{name: projectName, edit: true}"
         *ngIf="!edit"
         [disabled]="!formValidity()"
         (click)="addResource()" type="submit" class="btn-sm btn btn-primary mt-1">
@@ -58,8 +58,8 @@
       <button *ngIf="edit"
               [disabled]="!formValidity()"
               class="btn btn-primary btn-sm mt-1"
-              [queryParams]="{projectName: projectName}"
-              routerLink="/viewResources"
+              [queryParams]="{name: projectName, edit: true}"
+              routerLink="/project"
               (click)="onEdit()">
         Save
       </button>

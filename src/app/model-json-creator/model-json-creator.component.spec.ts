@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ModelJsonCreatorComponent } from './model-json-creator.component';
 
-describe('ModelJsonCreatorComponent', () => {
+xdescribe('ModelJsonCreatorComponent', () => {
   let component: ModelJsonCreatorComponent;
   let fixture: ComponentFixture<ModelJsonCreatorComponent>;
 

@@ -6,6 +6,7 @@ import {EntityActionsComponent} from '../entity-actions/entity-actions.component
 import {ActivatedRoute, Params} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {Model} from '../../interfaces/model';
+import {zip} from 'rxjs';
 
 @Component({
   selector: 'app-project',
@@ -16,16 +17,26 @@ export class ProjectActionsComponent extends EntityActionsComponent implements O
   public fullApiUrl: string;
   public resources: Resource[] = [];
   public models: Model[] = [];
+  public editURL = false;
+  public description: string;
+  public editDescription = false;
 
   constructor(private activatedRoute: ActivatedRoute,
-              private projectService: ProjectService, protected toastr: ToastrService) { super(toastr); }
+              private projectService: ProjectService, protected toastr: ToastrService) {
+    super(toastr);
+  }
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams.subscribe( (params: Params) => {
-      this.name = params.name;
-      this.edit = params.edit;
-      this.fullApiUrl = params.fullApiUrl;
-      this.description = params.description;
+    const mergeObservables = zip(this.activatedRoute.queryParams, this.projectService.getProjects());
+    mergeObservables.subscribe((params: Params) => {
+      this.name = params[0].name;
+      this.edit = params[0].edit;
+      for (const project of params[1]) {
+        if (project.name === this.name) {
+          this.fullApiUrl = project.fullApiUrl;
+          this.description = project.description;
+        }
+      }
     });
   }
 
@@ -38,34 +49,18 @@ export class ProjectActionsComponent extends EntityActionsComponent implements O
       models: this.models
     };
     super.addEntity(project, this.projectService.addProject(project), 'Project');
+    this.edit = true;
   }
 
   public onEdit(): void {
+    this.editDescription = false;
+    this.editURL = false;
     const project: Project = {
       name: this.name,
       fullApiUrl: this.fullApiUrl,
       description: this.description,
       resources: this.resources,
-      models: this.models
     };
     super.editEntity(project, this.projectService.editProject(this.name, project), 'Project');
-  }
-
-  validURL(): boolean {
-    try {
-      const properUrl = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
-      return properUrl.test(this.fullApiUrl);
-    }
-    catch (e) { return false; }
-  }
-
-  formValidity(): boolean {
-    try {
-      if (this.name.length >= 3 && this.validURL()) {
-        return true;
-      }
-      return false;
-    }
-    catch (e) { return false; }
   }
 }

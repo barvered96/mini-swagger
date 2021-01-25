@@ -16,10 +16,14 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { ViewResourceComponent } from './view-resource/view-resource.component';
 import {ViewModelComponent} from './view-model/view-model.component';
 import { ModelJsonCreatorComponent } from './model-json-creator/model-json-creator.component';
+import { UrlValidDirective } from '../directives/url-valid.directive';
+import { ModelActionsComponent } from './model-actions/model-actions.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
+    UrlValidDirective,
     HomePageComponent,
     HeaderComponent,
     HomeViewComponent,
@@ -28,12 +32,15 @@ import { ModelJsonCreatorComponent } from './model-json-creator/model-json-creat
     ResourceActionsComponent,
     ViewResourceComponent,
     ViewModelComponent,
-    ModelJsonCreatorComponent
+    ModelJsonCreatorComponent,
+    UrlValidDirective,
+    ModelActionsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
     ToastrModule.forRoot(),
     ModalModule.forRoot(),
     FormsModule

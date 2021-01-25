@@ -57,6 +57,7 @@ export class ProjectService {
         const editedProj = this.projectExists(editedProject.name, currentProjects);
         if (projectName && !editedProj || projectName && editedProj && projectName.name === editedProj.name) {
         editedProject.resources = projectName.resources;
+        editedProject.models = projectName.models;
         currentProjects[currentProjects.indexOf(projectName)] = editedProject;
         this.localStorageService.setStorage(PROJECT_KEY, currentProjects);
       }
