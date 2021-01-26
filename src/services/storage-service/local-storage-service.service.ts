@@ -11,14 +11,12 @@ export class LocalStorageService {
 
   public getStorage(key: string): Observable<any> {
     const source = of(this.storage.get(key) || []);
-    source.subscribe(tasks =>
+    source.subscribe(projects =>
     { return; });
-
     return source;
   }
 
-  public setStorage(key: string, newTasks): void {
-    this.storage.set(key, newTasks);
+  public setStorage(key: string, newProjects): void {
+    this.storage.set(key, newProjects);
   }
-
 }

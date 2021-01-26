@@ -7,6 +7,7 @@ import {ActivatedRoute, Params} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {Model} from '../../interfaces/model';
 import {zip} from 'rxjs';
+import {EntitiesEnum} from '../../enums/entities.enum';
 
 @Component({
   selector: 'app-project',
@@ -48,7 +49,7 @@ export class ProjectActionsComponent extends EntityActionsComponent implements O
       resources: this.resources,
       models: this.models
     };
-    super.addEntity(project, this.projectService.addProject(project), 'Project');
+    super.addEntity(project, this.projectService.addProject(project), EntitiesEnum.Project);
     this.edit = true;
   }
 
@@ -61,6 +62,6 @@ export class ProjectActionsComponent extends EntityActionsComponent implements O
       description: this.description,
       resources: this.resources,
     };
-    super.editEntity(project, this.projectService.editProject(this.name, project), 'Project');
+    super.editEntity(project, this.projectService.editProject(this.name, project), EntitiesEnum.Project);
   }
 }

@@ -10,7 +10,7 @@
           <img (click)="deleteModel(model)" src="/assets/img/trash.svg" alt="" width="20" height="20"
                title="Delete Model">
           <img
-            [queryParams]="{projectName: projectName, modelName: model.name, fields: model.fields, edit: true}"
+            [queryParams]="{projectName: projectName, modelName: model.name, edit: true}"
             routerLink="/model" src="/assets/img/pencil.svg" alt="" width="20" height="20" title="Edit Model">
           </div>
         </div>

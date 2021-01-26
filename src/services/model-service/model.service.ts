@@ -15,63 +15,57 @@ export class ModelService {
   constructor(private localStorageService: LocalStorageService, private projectService: ProjectService) {
   }
 
-  getModelByProject(project: Project, name: string): Model {
-    return project.models.find(model => model.name === name);
-  }
-
-  getModelByName(name: string): Observable<any> {
-    return this.projectService.getProjects()
-      .pipe(
-          mergeMap(projects => projects),
-          filter(project => this.getModelByProject(project, name) !== undefined),
-          map(project => this.getModelByProject(project, name))
-        );
-  }
-
-  addModel(projectIndex: number, model: Model): Observable<Project[]> {
+  addModel(project: Project, model: Model): Observable<Project[]> {
     return this.projectService.getProjects()
       .pipe(
         tap(currentProjects => {
-            const foundModel = this.getModelByProject(currentProjects[projectIndex], model.name);
+            const foundModel = project.models.find(currModel => currModel.name === model.name);
             if (!foundModel) {
-              currentProjects[projectIndex].models.push(model);
+              const projectIndex = currentProjects.findIndex(currProject => currProject.name === project.name);
+              project.models.push(model);
+              currentProjects[projectIndex] = project;
               this.localStorageService.setStorage(PROJECT_KEY, currentProjects);
             } else {
-              throw new Error(`Failed to create Model ${model.name} in Project ${currentProjects[projectIndex].name}, already exists`);
+              throw new Error(`Failed to create Model ${model.name} in Project ${project.name}, already exists`);
             }
           }
         ));
   }
 
-  deleteModel(projectIndex: number, model: Model): Observable<Project[]> {
+  deleteModel(project: Project, model: Model): Observable<Project[]> {
     return this.projectService.getProjects()
       .pipe(
-        tap(currentResources => {
-          const foundModel = this.getModelByProject(currentResources[projectIndex], model.name);
+        tap(currentProjects => {
+          const foundModel = project.models.find(currModel => currModel.name === model.name);
           if (foundModel) {
-            currentResources[projectIndex].models.splice(currentResources[projectIndex].models.indexOf(foundModel), 1);
-            this.localStorageService.setStorage(PROJECT_KEY, currentResources);
+            if (project.resources.find(resource => resource.body === model.name)) {
+              throw new Error(`Model ${model.name} already exists in some resource`);
+            }
+            const projectIndex = currentProjects.findIndex(currProject => currProject.name === project.name);
+            project.models.splice(project.models.indexOf(foundModel), 1);
+            currentProjects[projectIndex] = project;
+            this.localStorageService.setStorage(PROJECT_KEY, currentProjects);
           } else {
-            throw new Error(`Failed to delete Model ${model.name} in Project ${currentResources[projectIndex].name}`);
+            throw new Error(`Failed to delete Model ${model.name} in Project ${project.name}`);
           }
         }));
   }
 
-  editModel(projectIndex: number, editModel: Model): Observable<Project[]> {
+  editModel(project: Project, editModel: Model): Observable<Project[]> {
     return this.projectService.getProjects()
       .pipe(
-        tap(currentResources => {
-          const foundEdited = this.getModelByProject(currentResources[projectIndex], editModel.name);
+        tap(currentProjects => {
+          const foundEdited = project.models.find(currModel => currModel.name === editModel.name);
           if (foundEdited) {
-            const index = currentResources[projectIndex].models.indexOf(foundEdited);
-            currentResources[projectIndex].models.splice(index, 1);
-            currentResources[projectIndex].models.splice(index, 0, editModel);
-            this.localStorageService.setStorage(PROJECT_KEY, currentResources);
+            const projectIndex = currentProjects.findIndex(currProject => currProject.name === project.name);
+            const index = project.models.indexOf(foundEdited);
+            project.models.splice(index, 1);
+            project.models.splice(index, 0, editModel);
+            currentProjects[projectIndex] = project;
+            this.localStorageService.setStorage(PROJECT_KEY, currentProjects);
           } else {
-            throw new Error(`Failed to edit Model ${editModel.name} in Project ${currentResources[projectIndex].name}`);
+            throw new Error(`Failed to edit Model ${editModel.name} in Project ${project.name}`);
           }
         }));
   }
-
-
 }

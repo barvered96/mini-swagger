@@ -1,11 +1,11 @@
-<div class="card">
+<div *ngIf="!isDeleted" class="card">
   <div class="card-header">
     <ul class="nav">
       <li class="nav-item active fw-bold">
         {{expandedResource?.name}}
       </li>
       <span class="m-2"></span>
-      <li class="rounded nav-item {{optionsColors[expandedResource.method]}} text-white">
+      <li class="rounded nav-item {{option}} text-white">
         {{expandedResource?.method}}
       </li>
       <span class="m-2"></span>
@@ -20,9 +20,12 @@
   </div>
   <div class="card-body bg-dark text-white">
     <h5 class="fw-bold"> {{model?.name}} </h5>
-    {{'{'}}
+    &#123;
     <br>
-    <span *ngFor="let model of model.fields"> {{model.name + ': ' + model.fieldType}} <br></span>
-    {{'}'}}
+    <div *ngFor="let model of model.fields"> {{model.name + ': ' + model.fieldType}} </div>
+    &#125;
   </div>
+</div>
+<div *ngIf="isDeleted" class="card bg-dark text-white">
+  Model was deleted
 </div>

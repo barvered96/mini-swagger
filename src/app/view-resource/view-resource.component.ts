@@ -5,7 +5,9 @@ import {BsModalService} from 'ngx-bootstrap/modal';
 import {ProjectService} from '../../services/project-service/project.service';
 import {ActivatedRoute} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
-import {zip} from 'rxjs';
+import {Project} from '../../interfaces/project';
+import {EntitiesEnum} from '../../enums/entities.enum';
+import {ConfirmDeleteComponent} from '../confirm-delete/confirm-delete.component';
 
 @Component({
   selector: 'app-view-resource',
@@ -14,32 +16,33 @@ import {zip} from 'rxjs';
 })
 export class ViewResourceComponent implements OnInit {
   public resources: Resource[];
-  public projectIndex: number;
   @Input() public projectName: string;
+  public project: Project;
   public expandedResource: Resource = null;
 
   constructor(private activatedRoute: ActivatedRoute, private projectService: ProjectService,
-              private resourceService: ResourceService,  private toastr: ToastrService) { }
+              private resourceService: ResourceService,  private toastr: ToastrService, private modalService: BsModalService) { }
 
   ngOnInit(): void {
     this.projectService.getProjects().subscribe(currentProjects => {
-      for (const [i, project] of currentProjects.entries()) {
-        if (project.name === this.projectName) {
-          this.resources = project.resources;
-          this.projectIndex = i;
-        }
-      }
+      this.project = currentProjects.find(project =>  project.name === this.projectName);
+      this.resources = this.project.resources;
     });
   }
 
   deleteResource(resource: Resource): void {
-    const deleteSub = this.resourceService.deleteResource(this.projectIndex, resource).subscribe(projects => {
-      this.toastr.success(`Successfully deleted resource ${resource.name} in project ${projects[this.projectIndex].name}`, 'Resource');
-      this.resources = projects[this.projectIndex].resources;
-    },
-      err => this.toastr.error(err, 'Resource')
-    );
-    deleteSub.unsubscribe();
+    const confirmDelete = this.modalService.show(ConfirmDeleteComponent,
+      {initialState: {name: resource.name, type: EntitiesEnum.Resource}});
+    confirmDelete.content.onClose.subscribe(result => {
+      if (result) {
+        this.resourceService.deleteResource(this.project, resource).subscribe(projects => {
+            this.toastr.success(`Successfully deleted resource ${resource.name} in project ${this.projectName}`, EntitiesEnum.Resource);
+            this.resources = this.project.resources;
+          },
+          err => this.toastr.error(err, EntitiesEnum.Resource)
+        );
+      }
+    });
   }
 
   expandResourceBody(resource: Resource): void {

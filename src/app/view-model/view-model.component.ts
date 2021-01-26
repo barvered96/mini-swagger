@@ -5,10 +5,13 @@ import {ProjectService} from '../../services/project-service/project.service';
 import {ToastrService} from 'ngx-toastr';
 import {Subject, zip} from 'rxjs';
 import {ModelService} from '../../services/model-service/model.service';
-import {BsModalRef} from 'ngx-bootstrap/modal';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ModelField} from '../../interfaces/modelField';
 import {Resource} from '../../interfaces/resource';
 import {ResourceService} from '../../services/resource-service/resource.service';
+import {Project} from '../../interfaces/project';
+import {EntitiesEnum} from '../../enums/entities.enum';
+import {ConfirmDeleteComponent} from '../confirm-delete/confirm-delete.component';
 
 @Component({
   selector: 'app-view-models',
@@ -17,32 +20,31 @@ import {ResourceService} from '../../services/resource-service/resource.service'
 })
 export class ViewModelComponent implements OnInit {
   public models: Model[];
-  public projectIndex: number;
+  public project: Project;
   @Input() public projectName: string;
-  public types = ['number', 'string',' boolean', 'Array<number>', 'Array<string>', 'Array<boolean>'];
 
   constructor(private activatedRoute: ActivatedRoute, private projectService: ProjectService,
-              private modelService: ModelService,  private toastr: ToastrService) {}
+              private modelService: ModelService,  private toastr: ToastrService, private modalService: BsModalService) {}
 
   ngOnInit(): void {
     this.projectService.getProjects().subscribe(currentProjects => {
-      for (const [i, project] of currentProjects.entries()) {
-        if (project.name === this.projectName) {
-          this.models = project.models;
-          this.projectIndex = i;
-        }
-      }
+      this.project = currentProjects.find(project => project.name === this.projectName);
+      this.models = this.project.models;
     });
   }
 
   deleteModel(model: Model): void {
-    const deleteSub = this.modelService.deleteModel(this.projectIndex, model).subscribe(projects => {
-        this.toastr.success(`Successfully deleted model ${model.name} in project ${projects[this.projectIndex].name}`, 'Resource');
-        this.models = projects[this.projectIndex].models;
-      },
-      err => this.toastr.error(err, 'Model')
-    );
-    deleteSub.unsubscribe();
+    const confirmDelete = this.modalService.show(ConfirmDeleteComponent, {initialState: {name: model.name, type: EntitiesEnum.Model}});
+    confirmDelete.content.onClose.subscribe(result => {
+      if (result) {
+        this.modelService.deleteModel(this.project, model).subscribe(projects => {
+            this.toastr.success(`Successfully deleted model ${model.name} in project ${this.project.name}`, EntitiesEnum.Model);
+            this.models = this.project.models;
+          },
+          err => this.toastr.error(err, EntitiesEnum.Model)
+        );
+      }
+    });
   }
 }
 

@@ -1,42 +1,64 @@
-<div class="new-model-form container">
+<div class="container">
   <h2 *ngIf="edit"> Edit Model {{name}}</h2>
   <h2 *ngIf="!edit"> Create a new model </h2>
   <form [formGroup]="modelForm">
     <div class="form-row">
       <div class="form-group">
         <label class="form-label"> Model Name: </label>
-        <input type="text" class="form-control" formControlName="modelName">
+        <input [ngClass]="{'is-invalid': formVariables.modelName.errors && formVariables.modelName.touched}" type="text" class="form-control"
+               formControlName="modelName">
+      </div>
+      <div *ngIf="formVariables.modelName.errors && formVariables.modelName.touched" class="alert-danger">
+        <div *ngIf="formVariables.modelName.errors.required">
+          Model name is required
+        </div>
+        <div *ngIf="formVariables.modelName.errors.minlength">
+          Model name must be at least 3 letters
+        </div>
       </div>
     </div>
-    <div *ngFor="let field of t.controls; index as i" class="list-group list-group-flush">
+    <div *ngFor="let field of formArray.controls; index as i" class="list-group list-group-flush">
       <div class="list-group-item">
         <h5 class="card-title"> Field {{i + 1}}</h5>
         <div [formGroup]="field" class="row">
           <div class="form-group col-6">
             <label class="form-label"> Field Name </label>
-            <input type="text" class="form-control" formControlName="fieldName">
+            <input [ngClass]="{'is-invalid': field.controls.name.errors && field.controls.name.touched}" type="text" class="form-control" formControlName="name">
+            <div class="alert-danger" *ngIf="field.controls.name.errors && field.controls.name.touched">
+              <div *ngIf="field.controls.name.errors.required">
+                Field name is required
+              </div>
+            </div>
           </div>
           <div class="form-group col-6">
             <label class="form-label"> Field Value </label>
-            <select class="form-select" formControlName="fieldType">
+            <select [ngClass]="{'is-invalid': field.controls.fieldType.errors && field.controls.fieldType.touched}" class="form-select" formControlName="fieldType">
               <option value=""></option>
               <option *ngFor="let option of options" [value]="option"> {{option}} </option>
             </select>
+            <div class="alert-danger" *ngIf="field.controls.fieldType.errors && field.controls.fieldType.touched">
+              <div *ngIf="field.controls.fieldType.errors.required">
+                Field Value is required
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
     <div class="form-group text-sm-end m-3">
-      <img type="submit" src="/assets/img/file-plus.svg" width="25" height="25" (click)="onExtraField()"  title="Add Field">
+      <img type="submit" src="/assets/img/file-plus.svg" width="25" height="25" (click)="onExtraField()"
+           title="Add Field">
       <span class="m-1"></span>
-      <img type="submit" src="/assets/img/file-minus.svg" width="25" height="25" (click)="onMinusField()"  title="Remove Field">
+      <img  type="submit" src="/assets/img/file-minus.svg" width="25" height="25" (click)="onMinusField()"
+           title="Remove Field">
     </div>
     <div class="form-group">
       <button *ngIf="!edit" type="submit" (click)="addModel()" class="btn btn-primary btn-sm mt-1"
-              [disabled]="!modelForm.valid"> Create
+              routerLink="/project" [queryParams]="{name: project.name, edit: true}" [disabled]="!modelForm.valid">
+        Create
       </button>
       <button *ngIf="edit" type="submit" (click)="editModel()" class="btn btn-primary btn-sm mt-1"
-              [disabled]="!modelForm.valid"> Save
+              routerLink="/project" [queryParams]="{name: project.name, edit: true}" [disabled]="!modelForm.valid"> Save
       </button>
     </div>
   </form>

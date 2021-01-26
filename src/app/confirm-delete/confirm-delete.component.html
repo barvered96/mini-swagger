@@ -1,0 +1,14 @@
+  <div class="modal-dialog m-0" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"> Confirm Deletion </h5>
+      </div>
+      <div class="modal-body">
+        <p> Are you sure you want to delete <span class="fw-bold"> {{type}} {{name}}? </span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" (click)="onCancel()" class="btn btn-primary btn-sm" data-dismiss="modal"> No </button>
+        <button type="button" (click)="onConfirm()" class="btn btn-primary btn-sm"> Yes </button>
+      </div>
+    </div>
+  </div>

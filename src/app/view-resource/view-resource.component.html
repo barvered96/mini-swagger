@@ -34,7 +34,7 @@
           <td>{{resource.description}}</td>
           <td>{{resource.method}}</td>
           <td>
-            <button (click)="expandResourceBody(resource)" class="btn btn-primary btn-sm" type="button"
+            <button *ngIf="resource.body" (click)="expandResourceBody(resource)" class="btn btn-primary btn-sm" type="button"
                     data-bs-toggle="collapse" data-bs-target="#resource-body" aria-expanded="false"
                     aria-controls="collapseExample">
               {{resource.body}}
@@ -46,7 +46,7 @@
       </tbody>
     </table>
     <div class="collapse m-1" id="resource-body">
-        <app-model-json-creator *ngIf="expandedResource" [expandedResource]="expandedResource" [expandedModel]="expandedResource.body"> </app-model-json-creator>
+        <app-model-json-creator *ngIf="expandedResource" [projectName]="projectName" [expandedResource]="expandedResource" [expandedModel]="expandedResource.body"> </app-model-json-creator>
     </div>
   </div>
   <button routerLink="/resource"

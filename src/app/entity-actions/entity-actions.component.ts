@@ -7,30 +7,26 @@ import {ToastrService} from 'ngx-toastr';
   styleUrls: ['./entity-actions.component.css']
 })
 
-export abstract class EntityActionsComponent implements OnInit{
+export abstract class EntityActionsComponent {
   public name: string;
   public edit = false;
 
   protected constructor(protected toastr: ToastrService) {}
 
-  abstract ngOnInit(): void;
-
   editEntity(entity: any, editEntity: Observable<any>, entityType: string): void {
-    const edit = editEntity.subscribe(entities => {
+    editEntity.subscribe(entities => {
         this.toastr.success(`Successfully edited ${entityType} ${entity.name}`, entityType);
       },
       err => this.toastr.error(err, entityType)
     );
-    edit.unsubscribe();
   }
 
   addEntity(entity: any, addEntity: Observable<any>, entityType: string): void {
-    const add = addEntity.subscribe(
+    addEntity.subscribe(
       entities => {
         this.toastr.success(`Successfully created ${entityType} ${entity.name}`, entityType);
       },
       err => this.toastr.error(err, entityType)
     );
-    add.unsubscribe();
   }
 }

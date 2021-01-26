@@ -11,55 +11,56 @@ import {tap} from 'rxjs/operators';
 })
 export class ResourceService {
 
-  constructor(private localStorageService: LocalStorageService, private projectService: ProjectService) {
-  }
+  constructor(private localStorageService: LocalStorageService, private projectService: ProjectService) {}
 
-  private getResource(project: Project, name: string): Resource {
-    return project.resources.find(resource => resource.name === name);
-  }
-
-  addResource(projectIndex: number, resource: Resource): Observable<Project[]> {
+  addResource(project: Project, resource: Resource): Observable<Project[]> {
     return this.projectService.getProjects()
       .pipe(
         tap(currentProjects => {
-            const foundResource = this.getResource(currentProjects[projectIndex], resource.name);
+            const foundResource = project.resources.find(source => source.name === resource.name);
             if (!foundResource) {
-              currentProjects[projectIndex].resources.push(resource);
+              const projectIndex = currentProjects.findIndex(currProject => currProject.name === project.name);
+              project.resources.push(resource);
+              currentProjects[projectIndex] = project;
               this.localStorageService.setStorage(PROJECT_KEY, currentProjects);
             } else {
               throw new Error(`Failed to create Resource ${resource.name} in
-               Project ${currentProjects[projectIndex].name}, already exists`);
+               Project ${project.name}, already exists`);
             }
           }
         ));
   }
 
-  deleteResource(projectIndex: number, resource: Resource): Observable<Project[]> {
+  deleteResource(project: Project, resource: Resource): Observable<Project[]> {
     return this.projectService.getProjects()
       .pipe(
-        tap(currentResources => {
-          const foundResource = this.getResource(currentResources[projectIndex], resource.name);
+        tap(currentProjects => {
+          const foundResource = project.resources.find(source => source.name === resource.name);
           if (foundResource) {
-            currentResources[projectIndex].resources.splice(currentResources[projectIndex].resources.indexOf(foundResource), 1);
-            this.localStorageService.setStorage(PROJECT_KEY, currentResources);
+            const projectIndex = currentProjects.findIndex(currProject => currProject.name === project.name);
+            project.resources.splice(project.resources.indexOf(foundResource), 1);
+            currentProjects[projectIndex] = project;
+            this.localStorageService.setStorage(PROJECT_KEY, currentProjects);
           } else {
-            throw new Error(`Failed to delete Resource ${resource.name} in Project ${currentResources[projectIndex].name}`);
+            throw new Error(`Failed to delete Resource ${resource.name} in Project ${project.name}`);
           }
         }));
   }
 
-  editResource(projectIndex: number, editedResource: Resource): Observable<Project[]> {
+  editResource(project: Project, editedResource: Resource): Observable<Project[]> {
     return this.projectService.getProjects()
       .pipe(
-        tap(currentResources => {
-          const foundEdited = this.getResource(currentResources[projectIndex], editedResource.name);
+        tap(currentProjects => {
+          const foundEdited = project.resources.find(source => source.name === editedResource.name);
           if (foundEdited) {
-            const index = currentResources[projectIndex].resources.indexOf(foundEdited);
-            currentResources[projectIndex].resources.splice(index, 1);
-            currentResources[projectIndex].resources.splice(index, 0, editedResource);
-            this.localStorageService.setStorage(PROJECT_KEY, currentResources);
+            const index = project.resources.indexOf(foundEdited);
+            const projectIndex = currentProjects.findIndex(currProject => currProject.name === project.name);
+            project.resources.splice(index, 1);
+            project.resources.splice(index, 0, editedResource);
+            currentProjects[projectIndex] = project;
+            this.localStorageService.setStorage(PROJECT_KEY, currentProjects);
           } else {
-            throw new Error(`Failed to edit Resource ${editedResource.name} in Project ${currentResources[projectIndex].name}`);
+            throw new Error(`Failed to edit Resource ${editedResource.name} in Project ${project.name}`);
           }
         }));
   }

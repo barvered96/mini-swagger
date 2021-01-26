@@ -7,30 +7,25 @@ import {tap} from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-
 export class ProjectService {
-  constructor(private localStorageService: LocalStorageService) { }
 
-  private projectExists(projectName: string, currentProjects: Project[]): Project {
-    return currentProjects.find(project => project.name === projectName);
-  }
+  constructor(private localStorageService: LocalStorageService) {}
 
   public getProjects(): Observable<Project[]> {
     return this.localStorageService.getStorage(PROJECT_KEY);
   }
 
-  addProject(projectName: Project): Observable<Project[]> {
+  addProject(project: Project): Observable<Project[]> {
     return this.getProjects()
       .pipe(
         tap(currentProjects => {
-        if (!this.projectExists(projectName.name, currentProjects)) {
-          currentProjects.push(projectName);
-          this.localStorageService.setStorage(PROJECT_KEY, currentProjects);
+          if (!currentProjects.find(currProject => currProject.name === project.name)) {
+            currentProjects.push(project);
+            this.localStorageService.setStorage(PROJECT_KEY, currentProjects);
+          } else {
+            throw new Error(`Failed to create ${project.name}, already exists`);
           }
-        else {
-          throw new Error(`Failed to create ${projectName.name}, already exists`);
-          }
-       })
+        })
       );
   }
 
@@ -38,13 +33,12 @@ export class ProjectService {
     return this.getProjects()
       .pipe(
         tap(currentProjects => {
-        const projectName = this.projectExists(name, currentProjects);
-        if (projectName) {
-          currentProjects.splice(currentProjects.indexOf(projectName), 1);
-          this.localStorageService.setStorage(PROJECT_KEY, currentProjects);
-          }
-        else {
-          throw new Error(`Failed to delete ${projectName.name}`);
+          const projectName = currentProjects.find(currProject => currProject.name === name);
+          if (projectName) {
+            currentProjects.splice(currentProjects.indexOf(projectName), 1);
+            this.localStorageService.setStorage(PROJECT_KEY, currentProjects);
+          } else {
+            throw new Error(`Failed to delete ${projectName.name}`);
           }
         })
       );
@@ -53,17 +47,16 @@ export class ProjectService {
   editProject(name: string, editedProject: Project): Observable<Project[]> {
     return this.getProjects().pipe(
       tap(currentProjects => {
-        const projectName = this.projectExists(name, currentProjects);
-        const editedProj = this.projectExists(editedProject.name, currentProjects);
-        if (projectName && !editedProj || projectName && editedProj && projectName.name === editedProj.name) {
-        editedProject.resources = projectName.resources;
-        editedProject.models = projectName.models;
-        currentProjects[currentProjects.indexOf(projectName)] = editedProject;
-        this.localStorageService.setStorage(PROJECT_KEY, currentProjects);
-      }
-      else {
-        throw new Error(`Failed to edit ${projectName.name}`);
-      }
-    }));
+        const project = currentProjects.find(currProject => currProject.name === name);
+        const editedProj = currentProjects.find(currProject => currProject.name === editedProject.name);
+        if (project && !editedProj || project && editedProj && project.name === editedProj.name) {
+          editedProject.resources = project.resources;
+          editedProject.models = project.models;
+          currentProjects[currentProjects.indexOf(project)] = editedProject;
+          this.localStorageService.setStorage(PROJECT_KEY, currentProjects);
+        } else {
+          throw new Error(`Failed to edit ${project.name}`);
+        }
+      }));
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ModelField} from '../../interfaces/modelField';
 import {EntityActionsComponent} from '../entity-actions/entity-actions.component';
@@ -6,6 +6,11 @@ import {ActivatedRoute, Params} from '@angular/router';
 import {ProjectService} from '../../services/project-service/project.service';
 import {ToastrService} from 'ngx-toastr';
 import {zip} from 'rxjs';
+import {Model} from '../../interfaces/model';
+import {ModelService} from '../../services/model-service/model.service';
+import {Project} from '../../interfaces/project';
+import {EntitiesEnum} from '../../enums/entities.enum';
+import {FieldTypesEnum} from '../../enums/field-types.enum';
 
 @Component({
   selector: 'app-model-actions',
@@ -14,37 +19,44 @@ import {zip} from 'rxjs';
 })
 export class ModelActionsComponent extends EntityActionsComponent implements OnInit {
   modelForm: FormGroup;
-  public projectIndex: number;
-  public projectName: string;
-  public numberFields = 1;
-  public options = ['string', 'number', 'boolean', 'Array<number>', 'Array<string>', 'Array<boolean>'];
+  public project: Project;
+  public numberFields: number;
+  public options = Object.keys(FieldTypesEnum).filter(key => isNaN(parseInt(key, 10)));
   public fields: ModelField[] = [{name: 'Some Field', fieldType: 'string'}];
 
   constructor(private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute,
-              private projectService: ProjectService, protected toastr: ToastrService) { super(toastr) }
+              private projectService: ProjectService, private modelService: ModelService,
+              protected toastr: ToastrService) {
+    super(toastr);
+  }
 
   ngOnInit(): void {
     const mergeObservables = zip(this.activatedRoute.queryParams, this.projectService.getProjects());
     mergeObservables.subscribe((params: Params) => {
-      this.projectName = params[0].projectName;
+      this.project = params[1].find(project => project.name === params[0].projectName);
       this.name = params[0].modelName;
-      if (params[0].fields) {
-        this.fields = params[0].fields;
-      }
       this.edit = params[0].edit;
-      for (const [index, project] of params[1].entries()) {
-        if (project.name === this.projectName) {
-          this.projectIndex = index;
-        }
-      }
       this.modelForm = this.formBuilder.group({
-        modelName: new FormControl(this.name),
-        fields:  new FormArray([])
+        modelName: new FormControl(this.name, [Validators.required, Validators.minLength(3)]),
+        fields: new FormArray([])
       });
-      this.t.push(this.formBuilder.group( {
-        fieldName: ['Some Field', [Validators.required, Validators.minLength]],
-        fieldType: ['number', Validators.required]
-      }));
+      if (this.edit) {
+        const fields = this.project.models.find(model => model.name === this.name).fields;
+        for (const field of fields) {
+          this.formArray.push(this.formBuilder.group({
+            name: [field.name, Validators.required],
+            fieldType: [field.fieldType, Validators.required]
+          }));
+        }
+        this.numberFields = fields.length;
+      }
+      else {
+        this.formArray.push(this.formBuilder.group({
+          name: ['Some Field', Validators.required],
+          fieldType: ['number', Validators.required]
+        }));
+        this.numberFields = 1;
+      }
     });
   }
 
@@ -61,29 +73,42 @@ export class ModelActionsComponent extends EntityActionsComponent implements OnI
   }
 
   onChangeNumFields(): void {
-    if (this.t.length < this.numberFields) {
-      for (let i = this.t.length; i < this.numberFields; i++) {
-        this.t.push(this.formBuilder.group({
-          fieldName: ['', [Validators.required, Validators.minLength]],
+    if (this.formArray.length < this.numberFields) {
+      for (let i = this.formArray.length; i < this.numberFields; i++) {
+        this.formArray.push(this.formBuilder.group({
+          name: ['', Validators.required],
           fieldType: ['', Validators.required]
         }));
       }
     } else {
-      for (let i = this.t.length; i >= this.numberFields; i--) {
-        this.t.removeAt(i);
+      for (let i = this.formArray.length; i >= this.numberFields; i--) {
+        this.formArray.removeAt(i);
       }
     }
   }
 
   addModel(): void {
-    console.log(this.t.value);
+    const model: Model = {
+      name: this.formVariables.modelName.value,
+      fields: this.formArray.value
+    };
+    super.addEntity(model, this.modelService.addModel(this.project, model), EntitiesEnum.Model);
   }
 
   editModel(): void {
-
+    const model: Model = {
+      name: this.formVariables.modelName.value,
+      fields: this.formArray.value
+    };
+    super.editEntity(model, this.modelService.editModel(this.project, model), EntitiesEnum.Model);
   }
 
-  get f(): any { return this.modelForm.controls; }
-  get t(): any { return this.f.fields as FormArray; }
+  get formVariables(): any {
+    return this.modelForm.controls;
+  }
+
+  get formArray(): any {
+    return this.formVariables.fields as FormArray;
+  }
 
 }

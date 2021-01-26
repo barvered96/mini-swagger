@@ -1,6 +1,6 @@
 import {Directive, Input} from '@angular/core';
 import { NG_VALIDATORS, Validator, ValidationErrors, FormGroup } from '@angular/forms';
-import {UrlValid} from '../utils/urlValidator';
+import {UrlValid} from '../../utils/urlValidator';
 
 @Directive({
   selector: '[urlValid]',
