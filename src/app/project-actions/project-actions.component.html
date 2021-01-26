@@ -45,6 +45,6 @@
   </form>
 </div>
 <div *ngIf="edit">
-  <app-view-resource [projectName]="name"></app-view-resource>
-  <app-view-models [projectName]="name"></app-view-models>
+  <app-view-resource (deletedResource)="changeResource($event)" [projectName]="name"></app-view-resource>
+  <app-view-models [resources]="resources" [projectName]="name"></app-view-models>
 </div>

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import {Resource} from '../../interfaces/resource';
 import {ResourceService} from '../../services/resource-service/resource.service';
 import {BsModalService} from 'ngx-bootstrap/modal';
@@ -17,6 +17,7 @@ import {ConfirmDeleteComponent} from '../confirm-delete/confirm-delete.component
 export class ViewResourceComponent implements OnInit {
   public resources: Resource[];
   @Input() public projectName: string;
+  @Output() deletedResource = new EventEmitter<Project>();
   public project: Project;
   public expandedResource: Resource = null;
 
@@ -38,6 +39,7 @@ export class ViewResourceComponent implements OnInit {
         this.resourceService.deleteResource(this.project, resource).subscribe(projects => {
             this.toastr.success(`Successfully deleted resource ${resource.name} in project ${this.projectName}`, EntitiesEnum.Resource);
             this.resources = this.project.resources;
+            this.deletedResource.emit(this.project);
           },
           err => this.toastr.error(err, EntitiesEnum.Resource)
         );

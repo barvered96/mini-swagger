@@ -64,4 +64,8 @@ export class ProjectActionsComponent extends EntityActionsComponent implements O
     };
     super.editEntity(project, this.projectService.editProject(this.name, project), EntitiesEnum.Project);
   }
+
+  public changeResource(project: Project): void {
+    this.resources = project.resources;
+  }
 }

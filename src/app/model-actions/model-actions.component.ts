@@ -37,7 +37,7 @@ export class ModelActionsComponent extends EntityActionsComponent implements OnI
       this.name = params[0].modelName;
       this.edit = params[0].edit;
       this.modelForm = this.formBuilder.group({
-        modelName: new FormControl(this.name, [Validators.required, Validators.minLength(3)]),
+        modelName: new FormControl({value: this.name, disabled: this.edit}, [Validators.required, Validators.minLength(3)]),
         fields: new FormArray([])
       });
       if (this.edit) {
