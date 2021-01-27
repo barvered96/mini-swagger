@@ -14,12 +14,11 @@ export class ModelJsonCreatorComponent implements OnChanges {
   @Input() public expandedResource: Resource;
   @Input() public expandedModel: string;
   @Input() public projectName: string;
-  public option: number;
+  public option: string;
   public model: Model;
   public isDeleted: boolean;
-  public jsonSchema = '';
 
-  constructor(private projectService: ProjectService, private modelService: ModelService) { }
+  constructor(private projectService: ProjectService) { }
 
   ngOnChanges(): void {
     this.projectService.getProjects().subscribe(projects => {

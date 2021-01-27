@@ -22,7 +22,7 @@
     <h5 class="fw-bold"> {{model?.name}} </h5>
     &#123;
     <br>
-    <div *ngFor="let model of model.fields"> {{model.name + ': ' + model.fieldType}} </div>
+    <div class="{{model?.name}}" *ngFor="let model of model?.fields"> {{model.name + ': ' + model.fieldType}} </div>
     &#125;
   </div>
 </div>
