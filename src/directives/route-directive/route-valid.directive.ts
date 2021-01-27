@@ -1,6 +1,6 @@
 import {Directive, Input} from '@angular/core';
 import {FormGroup, NG_VALIDATORS, ValidationErrors} from '@angular/forms';
-import {RouteValid} from '../../utils/routeValidator';
+import {RouteValid} from '../../utils/route-validator';
 
 @Directive({
   selector: '[routeValid]',

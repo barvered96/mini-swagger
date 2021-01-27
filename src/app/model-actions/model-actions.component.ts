@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ModelField} from '../../interfaces/modelField';
 import {EntityActionsComponent} from '../entity-actions/entity-actions.component';
 import {ActivatedRoute, Params} from '@angular/router';
 import {ProjectService} from '../../services/project-service/project.service';
@@ -10,7 +9,6 @@ import {Model} from '../../interfaces/model';
 import {ModelService} from '../../services/model-service/model.service';
 import {Project} from '../../interfaces/project';
 import {EntitiesEnum} from '../../enums/entities.enum';
-import {FieldTypesEnum} from '../../enums/field-types.enum';
 
 @Component({
   selector: 'app-model-actions',
@@ -21,13 +19,13 @@ export class ModelActionsComponent extends EntityActionsComponent implements OnI
   modelForm: FormGroup;
   public project: Project;
   public numberFields: number;
-  public options = Object.keys(FieldTypesEnum).filter(key => isNaN(parseInt(key, 10)));
-  public fields: ModelField[] = [{name: 'Some Field', fieldType: 'string'}];
+  public types;
 
   constructor(private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute,
               private projectService: ProjectService, private modelService: ModelService,
               protected toastr: ToastrService) {
     super(toastr);
+    this.types = modelService.types;
   }
 
   ngOnInit(): void {
@@ -53,7 +51,7 @@ export class ModelActionsComponent extends EntityActionsComponent implements OnI
       else {
         this.formArray.push(this.formBuilder.group({
           name: ['Some Field', Validators.required],
-          fieldType: ['number', Validators.required]
+          fieldType: ['Number', Validators.required]
         }));
         this.numberFields = 1;
       }
@@ -62,28 +60,16 @@ export class ModelActionsComponent extends EntityActionsComponent implements OnI
 
   onExtraField(): void {
     this.numberFields += 1;
-    this.onChangeNumFields();
+    this.formArray.push(this.formBuilder.group({
+      name: ['', Validators.required],
+      fieldType: ['', Validators.required]
+    }));
   }
 
-  onMinusField(): void {
-    if (this.numberFields > 1) {
+  onMinusField(index: number): void {
+    if (index > 0 || index === 0 && this.numberFields > 1) {
+      this.formArray.removeAt(index);
       this.numberFields -= 1;
-      this.onChangeNumFields();
-    }
-  }
-
-  onChangeNumFields(): void {
-    if (this.formArray.length < this.numberFields) {
-      for (let i = this.formArray.length; i < this.numberFields; i++) {
-        this.formArray.push(this.formBuilder.group({
-          name: ['', Validators.required],
-          fieldType: ['', Validators.required]
-        }));
-      }
-    } else {
-      for (let i = this.formArray.length; i >= this.numberFields; i--) {
-        this.formArray.removeAt(i);
-      }
     }
   }
 

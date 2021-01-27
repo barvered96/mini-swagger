@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { validURL } from './urlValidator';
+import { validURL } from './url-validator';
 
 describe('Testing Url Validator Function', () => {
   const url1 = '';
