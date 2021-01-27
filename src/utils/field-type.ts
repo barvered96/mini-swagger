@@ -20,7 +20,6 @@ class FieldType {
   addType(type: string, fields: ModelField[]): void {
     FieldType.typesArray[type] = fields.map(field => [field.name, field.fieldType]);
     FieldType.typesArray[`array<${type}>`] = [FieldType.typesArray[type]];
-    console.log(FieldType.typesArray);
   }
 
   deleteType(type: string): void {
@@ -30,5 +29,4 @@ class FieldType {
 }
 
 const FieldTypeInstance = new FieldType();
-
 export default FieldTypeInstance;
