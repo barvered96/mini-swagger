@@ -1,7 +1,7 @@
 <div class="container">
   <h1 *ngIf="edit"> Project {{name}}'s Page</h1>
   <h2 *ngIf="!edit"> Create a new project </h2>
-  <form [urlValid]="['url']" name="form" #f="ngForm">
+  <form [urlValid]="['url']" name="form" #projectsForm="ngForm">
     <div class="form-group">
       <label for="name" class="form-label"> Project Name: </label>
       <input [disabled]="edit" id="name" [ngClass]="{'is-invalid': projectName.touched && projectName.invalid }" class="form-control"
@@ -17,12 +17,12 @@
     </div>
     <div class="form-group">
       <label for="desc" class="form-label">Description:
-        <img [hidden]="!edit" (click)="editDescription = !editDescription" src="/assets/img/pencil.svg" alt="" width="20" height="20" title="Edit Description"> </label>
+        <img *ngIf="edit" (click)="editDescription = !editDescription" src="/assets/img/pencil.svg" alt="" width="20" height="20" title="Edit Description"> </label>
       <input (change)="edit && onEdit()" (blur)="editDescription = false" [disabled]="!editDescription && edit" id="desc" name="desc" class="form-control editable" type="text" [(ngModel)]="description">
     </div>
     <div class="form-group">
       <label for="url" class="form-label">Full URL:
-        <img [hidden]="!edit" (click)="editURL = !editURL" src="/assets/img/pencil.svg" alt="" width="20" height="20" title="Edit URL"> </label>
+        <img *ngIf="edit" (click)="editURL = !editURL" src="/assets/img/pencil.svg" alt="" width="20" height="20" title="Edit URL"> </label>
       <input (change)="edit && url.valid && onEdit()" (blur)="editURL = false" [disabled]="!editURL && edit" id="url" name="url" #url="ngModel" required class="form-control" [ngClass]="{'is-invalid': url.touched && url.invalid}"
              type="text" [(ngModel)]="fullApiUrl">
     </div>
@@ -36,7 +36,7 @@
     </div>
     <div class="form-group">
       <button
-        [disabled]="f.form.invalid"
+        [disabled]="projectsForm.form.invalid"
         (click)="addProject()"
         *ngIf="!edit" type="submit" class="btn btn-primary btn-sm mt-1">
         Create

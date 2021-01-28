@@ -3,10 +3,6 @@
   border-style: groove;
 }
 
-.title {
-  text-align: center;
-}
-
 .table-wrapper {
   max-height: 20em;
   overflow-y: auto;

@@ -1,4 +1,3 @@
-/* tslint:disable:no-string-literal no-construct */
 import {ModelField} from '../interfaces/modelField';
 
 class FieldType {

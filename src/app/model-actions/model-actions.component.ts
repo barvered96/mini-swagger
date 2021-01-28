@@ -4,11 +4,11 @@ import {EntityActionsComponent} from '../entity-actions/entity-actions.component
 import {ActivatedRoute, Params} from '@angular/router';
 import {ProjectService} from '../../services/project-service/project.service';
 import {ToastrService} from 'ngx-toastr';
-import {zip} from 'rxjs';
 import {Model} from '../../interfaces/model';
 import {ModelService} from '../../services/model-service/model.service';
 import {Project} from '../../interfaces/project';
 import {EntitiesEnum} from '../../enums/entities.enum';
+import {combineLatest} from 'rxjs';
 
 @Component({
   selector: 'app-model-actions',
@@ -29,11 +29,11 @@ export class ModelActionsComponent extends EntityActionsComponent implements OnI
   }
 
   ngOnInit(): void {
-    const mergeObservables = zip(this.activatedRoute.queryParams, this.projectService.getProjects());
-    mergeObservables.subscribe((params: Params) => {
-      this.project = params[1].find(project => project.name === params[0].projectName);
-      this.name = params[0].modelName;
-      this.edit = params[0].edit;
+    const mergeObservables = combineLatest<[Params, Project[]]>(this.activatedRoute.queryParams, this.projectService.getProjects());
+    mergeObservables.subscribe(([params, projects]) => {
+      this.project = projects.find(project => project.name === params.projectName);
+      this.name = params.modelName;
+      this.edit = params.edit;
       this.modelForm = this.formBuilder.group({
         modelName: new FormControl({value: this.name, disabled: this.edit}, [Validators.required, Validators.minLength(3)]),
         fields: new FormArray([])

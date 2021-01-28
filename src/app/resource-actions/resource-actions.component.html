@@ -1,7 +1,7 @@
 <div class="container">
   <h2 *ngIf="edit"> Edit Resource {{name}}</h2>
   <h2 *ngIf="!edit"> Create a new resource </h2>
-  <form [routeValid]="['routePath']" name="form" #f="ngForm">
+  <form [routeValid]="['routePath']" name="form" #resourceForm="ngForm">
     <div class="form-group">
       <label for="projectName" class="form-label"> Project Name </label>
       <input type="text" disabled id="projectName" name="projectName" class="form-control" [(ngModel)]="project.name">
@@ -68,12 +68,12 @@
         routerLink="/project"
         [queryParams]="{name: project.name, edit: true}"
         *ngIf="!edit"
-        [disabled]="f.form.invalid"
+        [disabled]="resourceForm.form.invalid"
         (click)="addResource()" type="submit" class="btn-sm btn btn-primary mt-1">
         Create
       </button>
       <button *ngIf="edit"
-              [disabled]="f.form.invalid"
+              [disabled]="resourceForm.form.invalid"
               class="btn btn-primary btn-sm mt-1"
               [queryParams]="{name: project.name, edit: true}"
               routerLink="/project"
