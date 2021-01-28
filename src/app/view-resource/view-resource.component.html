@@ -1,0 +1,57 @@
+<h4 class="text-center mt-3"> Resources </h4>
+<div class="container">
+  <div class="table-wrapper">
+    <form class="form-inline my-2 my-lg-0">
+      <input #searchValue class="form-control" type="text" placeholder="Search" aria-label="Search">
+    </form>
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Resource Options</th>
+        <th scope="col">Resource Name</th>
+        <th scope="col">API Suffix</th>
+        <th scope="col">Description</th>
+        <th scope="col">Method</th>
+        <th scope="col">Body</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let resource of resources; index as i">
+        <tr *ngIf="resource.name.startsWith(searchValue.value)">
+          <th scope="row">{{i + 1}}</th>
+          <td>
+            <img (click)="deleteResource(resource)" src="/assets/img/trash.svg" alt="" width="20" height="20"
+                 title="Delete Resource">
+            <span class="p-2"></span>
+            <img routerLink="/resource"
+                 [queryParams]="{projectName: projectName, name: resource.name, route: resource.route,
+                  description: resource.description, method: resource.method, body: resource.body, edit: true}"
+                 src="/assets/img/pencil.svg" alt="" width="20" height="20" title="Edit Resource">
+          </td>
+          <td>{{resource.name}}</td>
+          <td>{{resource.route}}</td>
+          <td>{{resource.description}}</td>
+          <td>{{resource.method}}</td>
+          <td>
+            <button *ngIf="resource.body" (click)="expandResourceBody(resource)" class="btn btn-primary btn-sm" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#resource-body" aria-expanded="false"
+                    aria-controls="collapseExample">
+              {{resource.body}}
+            </button>
+          </td>
+        </tr>
+      </ng-container>
+      </tbody>
+    </table>
+    <div class="collapse m-1" id="resource-body">
+        <app-model-json-creator *ngIf="expandedResource" [projectName]="projectName" [expandedResource]="expandedResource" [expandedModel]="expandedResource.body"> </app-model-json-creator>
+    </div>
+  </div>
+  <button routerLink="/resource"
+          [queryParams]="{projectName: projectName}"
+          type="submit"
+          class="btn btn-primary btn-sm">
+    Create New Resource
+  </button>
+</div>

@@ -1,0 +1,85 @@
+<div class="container">
+  <h2 *ngIf="edit"> Edit Resource {{name}}</h2>
+  <h2 *ngIf="!edit"> Create a new resource </h2>
+  <form [routeValid]="['routePath']" name="form" #resourceForm="ngForm">
+    <div class="form-group">
+      <label for="projectName" class="form-label"> Project Name </label>
+      <input type="text" disabled id="projectName" name="projectName" class="form-control" [(ngModel)]="project.name">
+    </div>
+    <div class="form-group">
+      <label for="name" class="form-label"> Resource Name: </label>
+      <input [disabled]="edit" [ngClass]="{'is-invalid': resourceName.touched && resourceName.invalid}" id="name"
+             name="resourceName" #resourceName="ngModel"
+             class="form-control" type="text" [(ngModel)]="name" required minlength="3">
+    </div>
+    <div class="alert-danger" *ngIf="resourceName.touched && resourceName.invalid">
+      <div *ngIf="resourceName.errors.required">
+        Resource Name must not be empty
+      </div>
+      <div *ngIf="resourceName.errors.minlength">
+        Resource Name must be at least 3 letters
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="method" class="form-label"> Method </label>
+      <select [ngClass]="{'is-invalid': methodType.touched && methodType.invalid}" required name="methodType"
+              #methodType="ngModel" class="form-select" aria-label="Default select example"
+              id="method" [(ngModel)]="method">
+        <option *ngFor="let option of options" [value]="option"> {{option}}</option>
+      </select>
+    </div>
+    <div class="alert-danger" *ngIf="methodType.touched && methodType.invalid">
+      You must pick a method
+    </div>
+    <div class="form-group">
+      <label for="description" class="form-label"> Description: </label>
+      <input id="description" name="description" class="form-control" type="text" [(ngModel)]="description">
+    </div>
+    <div class="form-group">
+      <label for="route" class="form-label"> Path: </label>
+      <input [ngClass]="{'is-invalid': routePath.touched && routePath.invalid}" required id="route" name="routePath"
+             #routePath="ngModel" class="form-control"
+             type="text" [(ngModel)]="route">
+    </div>
+    <div class="alert-danger" *ngIf="routePath.touched && routePath.invalid">
+      <div *ngIf="routePath.errors.required">
+        Route cannot be empty
+      </div>
+      <div *ngIf="routePath.errors.routeValid">
+        Route must be a valid url
+      </div>
+    </div>
+    <div *ngIf="method !== 'GET'">
+      <div class="form-group">
+        <label for="model" class="form-label"> Body: </label>
+        <select [ngClass]="{'is-invalid': model.touched && model.invalid}" required [(ngModel)]="body" name="model"
+                #model="ngModel" class="form-select"
+                id="model">
+          <option *ngFor="let projectModel of project.models"
+                  [ngValue]="projectModel.name"> {{projectModel.name}}</option>
+        </select>
+      </div>
+      <div class="alert-danger" *ngIf="model.touched && model.invalid">
+        Request Body is required
+      </div>
+    </div>
+    <div class="form-group">
+      <button
+        routerLink="/project"
+        [queryParams]="{name: project.name, edit: true}"
+        *ngIf="!edit"
+        [disabled]="resourceForm.form.invalid"
+        (click)="addResource()" type="submit" class="btn-sm btn btn-primary mt-1">
+        Create
+      </button>
+      <button *ngIf="edit"
+              [disabled]="resourceForm.form.invalid"
+              class="btn btn-primary btn-sm mt-1"
+              [queryParams]="{name: project.name, edit: true}"
+              routerLink="/project"
+              (click)="onEdit()">
+        Save
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,10 @@
+.form-resources {
+  background-color: white;
+  border-style: groove;
+}
+
+.table-wrapper {
+  max-height: 20em;
+  overflow-y: auto;
+  overflow-x: hidden;
+}

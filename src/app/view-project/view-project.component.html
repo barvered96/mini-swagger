@@ -1,0 +1,35 @@
+<h1 class="text-center"> Your Projects </h1>
+<div class="container">
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Project Options</th>
+        <th scope="col">Project Name</th>
+        <th scope="col">API base url</th>
+        <th scope="col">Description</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let project of projects; index as i">
+        <tr>
+          <th scope="row">{{i + 1}}</th>
+          <td>
+            <img (click)="deleteProject(project.name)" src="/assets/img/trash.svg" alt="" width="20" height="20"
+                 title="Delete Project">
+            <span class="p-2"></span>
+            <img
+              [queryParams]="{name: project.name, fullApiUrl: project.fullApiUrl, description: project.description, edit: true}"
+              routerLink="/project" src="/assets/img/eye-fill.svg" alt="" width="20" height="20" title="View Project">
+          </td>
+          <td>{{project.name}}</td>
+          <td>{{project.fullApiUrl}}</td>
+          <td>{{project.description}}</td>
+        </tr>
+      </ng-container>
+      </tbody>
+    </table>
+  </div>
+  <button routerLink="/project" type="submit" class="btn btn-primary btn-sm"> Create New Project</button>
+</div>
