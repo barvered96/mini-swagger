@@ -52,7 +52,6 @@ describe('Happy Flow', () => {
 
   it('Clicking on create new resource should lead to you resource page', () => {
     cy.contains('Create New Resource').click()
-    cy.url().should('include', '/resource')
-    cy.contains('button[type=submit]')
+    cy.url().should('include', '/model')
   })
 })
