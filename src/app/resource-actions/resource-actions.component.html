@@ -1,0 +1,58 @@
+<div class="new-resource-form container">
+  <h2 *ngIf="edit"> Edit Resource {{name}}</h2>
+  <h2 *ngIf="!edit"> Create a new resource </h2>
+  <form>
+    <div class="form-group">
+      <label for="projectName" class="form-label"> Project Name </label>
+      <input type="text" disabled id="projectName" name="projectName" class="form-control" [(ngModel)]="projectName">
+    </div>
+    <div class="form-group">
+      <label for="name" class="form-label"> Resource Name: </label>
+      <input [disabled]="edit" [ngClass]="{'is-invalid': name && name.length < 3 }" id="name" name="name"
+             class="form-control" type="text" [(ngModel)]="name">
+    </div>
+    <div class="alert-danger" *ngIf="name && name.length < 3">
+      Resource name must be at least 3 letters
+    </div>
+    <div class="form-group">
+      <label for="method" class="form-label"> Method </label>
+      <select [ngClass]="{'is-invalid': !method}" name="method" class="form-select" aria-label="Default select example"
+              id="method" [(ngModel)]="method">
+        <option *ngFor="let option of options" [value]="option"> {{option}}</option>
+      </select>
+    </div>
+    <div class="alert-danger" *ngIf="!method">
+      You must pick a method
+    </div>
+    <div class="form-group">
+      <label for="description" class="form-label"> Description: </label>
+      <input id="description" name="description" class="form-control" type="text" [(ngModel)]="description">
+    </div>
+    <div class="form-group">
+      <label for="route" class="form-label"> Path: </label>
+      <input [ngClass]="{'is-invalid': route && !pathValidity()}" id="route" name="route" class="form-control"
+             type="text" [(ngModel)]="route">
+    </div>
+    <div class="alert-danger" *ngIf="route && !pathValidity()">
+      Path must be a valid Route
+    </div>
+    <div class="form-group">
+      <button
+        routerLink="/viewResources"
+        [queryParams]="{projectName: projectName}"
+        *ngIf="!edit"
+        [disabled]="!formValidity()"
+        (click)="addResource()" type="submit" class="btn-sm btn btn-primary mt-1">
+        Create
+      </button>
+      <button *ngIf="edit"
+              [disabled]="!formValidity()"
+              class="btn btn-primary btn-sm mt-1"
+              [queryParams]="{projectName: projectName}"
+              routerLink="/viewResources"
+              (click)="onEdit()">
+        Save
+      </button>
+    </div>
+  </form>
+</div>

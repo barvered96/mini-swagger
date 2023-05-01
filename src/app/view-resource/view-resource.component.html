@@ -1,0 +1,45 @@
+<h1 class="title"> Project {{projectName}}'s Resources </h1>
+<div class="container">
+  <div class="table-wrapper">
+    <form class="form-inline my-2 my-lg-0">
+      <input #searchValue class="form-control" type="text" placeholder="Search" aria-label="Search">
+    </form>
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Resource Options</th>
+        <th scope="col">Resource Name</th>
+        <th scope="col">API Suffix</th>
+        <th scope="col">Description</th>
+        <th scope="col">Method</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let resource of resources; index as i">
+        <tr *ngIf="resource.name.startsWith(searchValue.value)">
+          <th scope="row">{{i + 1}}</th>
+          <td>
+            <img (click)="deleteResource(resource)" src="/assets/img/trash.svg" alt="" width="20" height="20"
+                 title="Delete Resource">
+            <span class="p-2"></span>
+            <img routerLink="/createResource"
+                 [queryParams]="{projectName: projectName, name: resource.name, route: resource.route, description: resource.description, method: resource.method, edit: true}"
+                 src="/assets/img/pencil.svg" alt="" width="20" height="20" title="Edit Resource">
+          </td>
+          <td>{{resource.name}}</td>
+          <td>{{resource.route}}</td>
+          <td>{{resource.description}}</td>
+          <td>{{resource.method}}</td>
+        </tr>
+      </ng-container>
+      </tbody>
+    </table>
+  </div>
+  <button routerLink="/createResource"
+          [queryParams]="{projectName: projectName}"
+          type="submit"
+          class="btn btn-primary btn-sm">
+    Create New Resource
+  </button>
+</div>

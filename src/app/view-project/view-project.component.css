@@ -1,0 +1,14 @@
+.form-resources {
+  background-color: white;
+  border-style: groove;
+}
+
+.title {
+  text-align: center;
+}
+
+.table-wrapper {
+  max-height: 20em;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
